@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EsnafPro Platinum - Cadde</title>
+    <title>EsnafPro Platinum - Cadde Burger</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script>
@@ -15,13 +15,18 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; }
-        /* Mobil Kaydırma İyileştirmeleri */
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        
+        /* Kaydırma Çubuğu İyileştirmeleri */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         
+        /* Mobilde inputlara tıklayınca zoom yapmasını engellemek için text-base */
+        input, select, textarea { font-size: 16px !important; }
+
         .dark body { background-color: #0f172a; color: #e2e8f0; }
         .dark .bg-white { background-color: #1e293b; border-color: #334155; }
         .dark .text-slate-700 { color: #f1f5f9; }
@@ -39,40 +44,23 @@
             <div class="text-center mb-8">
                 <i class="fa-solid fa-gem text-5xl text-indigo-500 mb-4 animate-bounce"></i>
                 <h1 class="text-2xl font-bold text-slate-800 dark:text-white tracking-wide">EsnafPro Platinum</h1>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Mobil & Masaüstü Uyumlu</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">İşletme Yönetim Paneli</p>
             </div>
-            
             <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Kullanıcı Adı</label>
-                    <input type="text" id="loginUser" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-slate-700 dark:text-white focus:border-indigo-500 outline-none" placeholder="Kullanıcı adınız">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Şifre</label>
-                    <input type="password" id="loginPass" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-slate-700 dark:text-white focus:border-indigo-500 outline-none" placeholder="••••••••">
-                </div>
-                
-                <div class="flex items-center justify-between">
-                    <label class="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" id="rememberMe" class="form-checkbox text-indigo-600 rounded">
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Beni Hatırla</span>
-                    </label>
-                </div>
-
-                <button onclick="checkLogin()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-lg shadow-lg active:scale-95 transition">
-                    Giriş Yap
-                </button>
-                
+                <input type="text" id="loginUser" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-slate-700 dark:text-white" placeholder="Kullanıcı Adı">
+                <input type="password" id="loginPass" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-slate-700 dark:text-white" placeholder="Şifre">
+                <div class="flex items-center"><input type="checkbox" id="rememberMe" class="mr-2"><span class="text-sm dark:text-slate-400">Beni Hatırla</span></div>
+                <button onclick="checkLogin()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg shadow-lg">Giriş Yap</button>
                 <div id="loginError" class="text-center text-red-500 text-sm font-bold hidden">Hatalı Bilgi!</div>
             </div>
         </div>
     </div>
 
-    <div id="app-container" class="hidden h-screen flex overflow-hidden relative">
+    <div id="app-container" class="hidden h-screen flex overflow-hidden relative w-full">
         
-        <div id="mobile-overlay" onclick="toggleMenu()" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
+        <div id="mobile-overlay" onclick="toggleMenu()" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden transition-opacity"></div>
 
-        <div id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 bg-slate-900 text-white flex flex-col justify-between shadow-2xl transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div id="sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-slate-900 text-white flex flex-col justify-between shadow-2xl transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex-shrink-0">
             <div>
                 <div class="h-16 flex items-center justify-between px-4 border-b border-slate-700 bg-slate-950">
                     <div class="flex items-center">
@@ -99,8 +87,9 @@
             </div>
         </div>
 
-        <div class="flex-1 flex flex-col w-full bg-gray-50 dark:bg-slate-950 transition-colors duration-300">
-            <header class="bg-white dark:bg-slate-800 shadow-sm h-16 flex items-center justify-between px-4 lg:px-6 z-10 flex-shrink-0">
+        <div class="flex-1 flex flex-col min-w-0 bg-gray-50 dark:bg-slate-950 transition-colors duration-300">
+            
+            <header class="bg-white dark:bg-slate-800 shadow-sm h-16 flex items-center justify-between px-4 lg:px-6 z-20 sticky top-0 flex-shrink-0">
                 <div class="flex items-center">
                     <button onclick="toggleMenu()" class="lg:hidden text-slate-600 dark:text-white mr-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-slate-700">
                         <i class="fa-solid fa-bars text-xl"></i>
@@ -125,37 +114,16 @@
             <main class="flex-1 overflow-x-hidden overflow-y-auto p-4 lg:p-6 pb-20">
                 
                 <div id="page-dashboard" class="space-y-6 fade-in">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-                        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
-                            <div class="absolute right-0 top-0 h-full w-1 bg-green-500"></div>
-                            <p class="text-xs font-bold text-slate-400 uppercase">Bugünkü Ciro</p>
-                            <h3 class="text-2xl font-bold text-slate-800 mt-1" id="statDailyRevenue">0 ₺</h3>
-                        </div>
-                        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
-                            <div class="absolute right-0 top-0 h-full w-1 bg-red-500"></div>
-                            <p class="text-xs font-bold text-slate-400 uppercase">Paket Sipariş</p>
-                            <h3 class="text-2xl font-bold text-slate-800 mt-1" id="statDeliveryCount">0</h3>
-                        </div>
-                        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
-                            <div class="absolute right-0 top-0 h-full w-1 bg-orange-500"></div>
-                            <p class="text-xs font-bold text-slate-400 uppercase">Aktif Masalar</p>
-                            <h3 class="text-2xl font-bold text-slate-800 mt-1" id="statActiveTables">0</h3>
-                        </div>
-                        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
-                            <div class="absolute right-0 top-0 h-full w-1 bg-indigo-500"></div>
-                            <p class="text-xs font-bold text-slate-400 uppercase">Toplam Müşteri</p>
-                            <h3 class="text-2xl font-bold text-slate-800 mt-1" id="statTotalCustomers">0</h3>
-                        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden"><div class="absolute right-0 top-0 h-full w-1 bg-green-500"></div><p class="text-xs font-bold text-slate-400 uppercase">Bugünkü Ciro</p><h3 class="text-2xl font-bold text-slate-800 mt-1" id="statDailyRevenue">0 ₺</h3></div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden"><div class="absolute right-0 top-0 h-full w-1 bg-red-500"></div><p class="text-xs font-bold text-slate-400 uppercase">Paket Sipariş</p><h3 class="text-2xl font-bold text-slate-800 mt-1" id="statDeliveryCount">0</h3></div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden"><div class="absolute right-0 top-0 h-full w-1 bg-orange-500"></div><p class="text-xs font-bold text-slate-400 uppercase">Aktif Masalar</p><h3 class="text-2xl font-bold text-slate-800 mt-1" id="statActiveTables">0</h3></div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden"><div class="absolute right-0 top-0 h-full w-1 bg-indigo-500"></div><p class="text-xs font-bold text-slate-400 uppercase">Toplam Müşteri</p><h3 class="text-2xl font-bold text-slate-800 mt-1" id="statTotalCustomers">0</h3></div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200">
-                            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center"><h3 class="font-bold text-slate-700">Son İşlemler</h3><span class="text-xs text-slate-400">Canlı</span></div>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left text-sm text-slate-600">
-                                    <thead class="bg-slate-50 text-xs uppercase"><tr><th class="px-4 py-3">Saat</th><th class="px-4 py-3">Tür</th><th class="px-4 py-3">Tutar</th></tr></thead>
-                                    <tbody id="dashboardSalesTable" class="divide-y divide-slate-100"></tbody>
-                                </table>
-                            </div>
+                            <div class="px-6 py-4 border-b border-slate-200"><h3 class="font-bold text-slate-700">Son İşlemler</h3></div>
+                            <div class="overflow-x-auto"><table class="w-full text-left text-sm text-slate-600"><thead class="bg-slate-50 text-xs uppercase"><tr><th class="px-4 py-3">Saat</th><th class="px-4 py-3">Tür</th><th class="px-4 py-3">Tutar</th></tr></thead><tbody id="dashboardSalesTable" class="divide-y divide-slate-100"></tbody></table></div>
                         </div>
                         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
                             <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-slate-700">📌 Pano</h3><button onclick="sayfaDegistir('notes')" class="text-xs text-indigo-500 font-bold hover:underline">Git</button></div>
@@ -167,31 +135,17 @@
                 <div id="page-pos" class="hidden h-full fade-in pb-20">
                     <div class="flex flex-col lg:flex-row gap-4 h-full">
                         <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-64 lg:h-auto flex-shrink-0">
-                            <div class="p-4 border-b bg-slate-50 rounded-t-xl flex justify-between items-center">
-                                <h3 class="font-bold text-slate-700">Masalar</h3>
-                                <button onclick="openSettings()" class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"><i class="fa-solid fa-plus"></i></button>
-                            </div>
+                            <div class="p-4 border-b bg-slate-50 rounded-t-xl flex justify-between items-center"><h3 class="font-bold text-slate-700">Masalar</h3><button onclick="openSettings()" class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"><i class="fa-solid fa-plus"></i></button></div>
                             <div class="flex-1 overflow-y-auto p-4"><div id="tablesGrid" class="grid grid-cols-3 gap-2"></div></div>
                         </div>
                         <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col opacity-50 pointer-events-none h-80 lg:h-auto flex-shrink-0" id="productSection">
                             <div class="p-4 border-b bg-slate-50 rounded-t-xl"><h3 class="font-bold text-slate-700" id="selectedTableName">Masa Seçiniz</h3></div>
-                            <div class="flex-1 overflow-y-auto p-4">
-                                <input type="text" id="searchProduct" onkeyup="filterProducts()" placeholder="Ürün Ara..." class="w-full mb-3 p-2 text-sm border rounded bg-transparent">
-                                <div id="productsGrid" class="grid grid-cols-2 gap-2"></div>
-                            </div>
+                            <div class="flex-1 overflow-y-auto p-4"><input type="text" id="searchProduct" onkeyup="filterProducts()" placeholder="Ürün Ara..." class="w-full mb-3 p-2 text-sm border rounded bg-transparent"><div id="productsGrid" class="grid grid-cols-2 gap-2"></div></div>
                         </div>
                         <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col opacity-50 pointer-events-none h-auto flex-shrink-0 mb-10" id="orderSection">
                             <div class="p-4 border-b bg-slate-50 rounded-t-xl flex justify-between"><h3 class="font-bold text-slate-700">Adisyon</h3><button onclick="clearCurrentOrder()" class="text-red-500 text-xs font-bold">TEMİZLE</button></div>
                             <div class="flex-1 overflow-y-auto p-4 min-h-[150px]"><ul id="currentOrderList" class="space-y-2"></ul></div>
-                            <div class="p-4 bg-slate-50 border-t rounded-b-xl">
-                                <div class="flex justify-between mb-4"><span class="text-slate-500">Toplam</span><span class="text-2xl font-bold text-slate-800" id="orderTotal">0.00 ₺</span></div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <button onclick="completePayment('Nakit')" class="bg-green-600 text-white py-3 rounded font-bold shadow text-xs">NAKİT</button>
-                                    <button onclick="completePayment('Kredi Kartı')" class="bg-indigo-600 text-white py-3 rounded font-bold shadow text-xs">POS</button>
-                                    <button onclick="addVeresiye()" class="bg-rose-500 text-white py-3 rounded font-bold shadow text-xs">VERESİYE</button>
-                                    <button onclick="sendToKitchen()" class="bg-blue-500 text-white py-3 rounded font-bold shadow text-xs">MUTFAK</button>
-                                </div>
-                            </div>
+                            <div class="p-4 bg-slate-50 border-t rounded-b-xl"><div class="flex justify-between mb-4"><span class="text-slate-500">Toplam</span><span class="text-2xl font-bold text-slate-800" id="orderTotal">0.00 ₺</span></div><div class="grid grid-cols-2 gap-2"><button onclick="completePayment('Nakit')" class="bg-green-600 text-white py-3 rounded font-bold shadow text-xs">NAKİT</button><button onclick="completePayment('Kredi Kartı')" class="bg-indigo-600 text-white py-3 rounded font-bold shadow text-xs">POS</button><button onclick="addVeresiye()" class="bg-rose-500 text-white py-3 rounded font-bold shadow text-xs">VERESİYE</button><button onclick="sendToKitchen()" class="bg-blue-500 text-white py-3 rounded font-bold shadow text-xs">MUTFAK</button></div></div>
                         </div>
                     </div>
                 </div>
@@ -202,37 +156,21 @@
                         <div class="p-6">
                             <div class="flex flex-col gap-4">
                                 <input type="text" id="mainName" placeholder="Müşteri Adı (Opsiyonel)" class="w-full p-4 rounded-xl bg-gray-50 border-2">
-                                <div class="relative">
-                                    <span class="absolute left-4 top-4 text-gray-400 font-bold text-xl">+90</span>
-                                    <input type="tel" id="mainInput" placeholder="5XX..." maxlength="10" class="w-full pl-16 pr-4 py-4 rounded-xl bg-gray-50 border-2 font-bold text-xl">
-                                </div>
-                                <button onclick="islemYap()" class="bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2">
-                                    <i class="fa-brands fa-whatsapp text-2xl"></i> Puan Ver & Mesaj At
-                                </button>
+                                <div class="relative"><span class="absolute left-4 top-4 text-gray-400 font-bold text-xl">+90</span><input type="tel" id="mainInput" placeholder="5XX..." maxlength="10" class="w-full pl-16 pr-4 py-4 rounded-xl bg-gray-50 border-2 font-bold text-xl"></div>
+                                <button onclick="islemYap()" class="bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp text-2xl"></i> Puan Ver & Mesaj At</button>
                             </div>
                         </div>
                     </div>
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                        <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-2">
-                            <h3 class="font-bold text-slate-700">Müşteri Listesi</h3>
-                            <input type="text" id="customerSearch" onkeyup="renderCustomerTable()" placeholder="Ara..." class="border p-2 rounded text-sm w-full md:w-64 bg-transparent">
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm text-slate-600">
-                                <thead class="bg-slate-50 text-xs uppercase"><tr><th class="px-4 py-3">İsim</th><th class="px-4 py-3">Tel</th><th class="px-4 py-3">Puan</th><th class="px-4 py-3 text-right">İşlem</th></tr></thead>
-                                <tbody id="transactionTable" class="divide-y divide-slate-100"></tbody>
-                            </table>
-                        </div>
+                        <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-2"><h3 class="font-bold text-slate-700">Müşteri Listesi</h3><input type="text" id="customerSearch" onkeyup="renderCustomerTable()" placeholder="Ara..." class="border p-2 rounded text-sm w-full md:w-64 bg-transparent"></div>
+                        <div class="overflow-x-auto"><table class="w-full text-left text-sm text-slate-600"><thead class="bg-slate-50 text-xs uppercase"><tr><th class="px-4 py-3">İsim</th><th class="px-4 py-3">Tel</th><th class="px-4 py-3">Puan</th><th class="px-4 py-3 text-right">İşlem</th></tr></thead><tbody id="transactionTable" class="divide-y divide-slate-100"></tbody></table></div>
                     </div>
                 </div>
 
                 <div id="page-marketing" class="hidden h-full fade-in pb-20">
                     <div class="flex flex-col lg:flex-row gap-6 h-full">
                         <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-96 lg:h-auto">
-                            <div class="p-4 border-b bg-slate-50 rounded-t-xl">
-                                <h3 class="font-bold text-slate-700">1. Alıcı Seçimi</h3>
-                                <input type="text" id="marketingSearch" onkeyup="renderMarketingList()" placeholder="Ara..." class="w-full mt-2 p-2 border rounded text-xs bg-white">
-                            </div>
+                            <div class="p-4 border-b bg-slate-50 rounded-t-xl"><h3 class="font-bold text-slate-700">1. Alıcı Seçimi</h3><input type="text" id="marketingSearch" onkeyup="renderMarketingList()" placeholder="Ara..." class="w-full mt-2 p-2 border rounded text-xs bg-white"></div>
                             <div id="marketingCustomerList" class="flex-1 overflow-y-auto p-2 space-y-1"></div>
                         </div>
                         <div class="lg:w-2/3 flex flex-col gap-6">
@@ -287,11 +225,37 @@
                         <div class="bg-white p-4 rounded-xl shadow-sm border"><p class="text-xs font-bold text-slate-400">Ay Gider</p><h3 class="text-xl font-bold text-red-600" id="finTotalExpense">0 ₺</h3></div>
                         <div class="bg-white p-4 rounded-xl shadow-sm border border-l-4 border-l-indigo-500"><p class="text-xs font-bold text-slate-400">Ay Net</p><h3 class="text-xl font-bold text-indigo-700" id="finNetProfit">0 ₺</h3></div>
                     </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200"><h3 class="font-bold text-slate-700 mb-4 border-b pb-2">Hızlı Gider</h3><div class="flex flex-col gap-3"><div class="flex gap-2"><input type="text" id="expenseDesc" placeholder="Açıklama" class="flex-1 p-2 border rounded"><input type="number" id="expenseAmount" placeholder="Tutar" class="flex-1 p-2 border rounded"><button onclick="addExpense()" class="bg-red-600 text-white px-4 rounded text-sm">Ekle</button></div></div><div class="mt-4 max-h-64 overflow-y-auto space-y-2" id="expenseList"></div></div></div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">Hızlı Gider</h3>
+                            <div class="flex flex-col gap-3">
+                                <div class="flex gap-2">
+                                    <input type="text" id="expenseDesc" placeholder="Açıklama" class="flex-1 p-3 border rounded text-sm bg-transparent min-w-0">
+                                    <input type="number" id="expenseAmount" placeholder="Tutar" class="w-24 p-3 border rounded text-sm bg-transparent text-center">
+                                    <button onclick="addExpense()" class="bg-red-600 text-white px-4 rounded font-bold text-sm flex-shrink-0">Ekle</button>
+                                </div>
+                            </div>
+                            <div class="mt-4 max-h-64 overflow-y-auto space-y-2" id="expenseList"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="page-stock" class="hidden space-y-6 fade-in pb-20">
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6"><div class="flex justify-between items-center mb-4"><h3 class="font-bold text-slate-700">Envanter</h3><button onclick="openStockModal()" class="bg-amber-500 text-white px-3 py-1 rounded text-xs font-bold">Ekle</button></div><div class="overflow-x-auto"><table class="w-full text-left text-sm text-slate-600"><thead class="bg-slate-50 text-xs uppercase"><tr><th class="px-2 py-2">Ürün</th><th class="px-2 py-2">Miktar</th><th class="px-2 py-2 text-right">İşlem</th></tr></thead><tbody id="stockTable" class="divide-y divide-slate-100"></tbody></table></div></div></div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                            <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-slate-700">Envanter</h3><button onclick="openStockModal()" class="bg-amber-500 text-white px-3 py-1 rounded text-xs font-bold">Ekle</button></div>
+                            <div class="overflow-x-auto"><table class="w-full text-left text-sm text-slate-600"><thead class="bg-slate-50 text-xs uppercase"><tr><th class="px-2 py-2">Ürün</th><th class="px-2 py-2">Miktar</th><th class="px-2 py-2 text-right">İşlem</th></tr></thead><tbody id="stockTable" class="divide-y divide-slate-100"></tbody></table></div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                            <h3 class="font-bold text-slate-700 mb-4">Tedarikçi Rehberi</h3>
+                            <div class="flex gap-2 mb-4">
+                                <input id="suppName" placeholder="Firma" class="flex-1 border p-2 rounded text-xs bg-transparent min-w-0">
+                                <input id="suppTel" placeholder="Tel" class="w-24 border p-2 rounded text-xs bg-transparent">
+                                <button onclick="addSupplier()" class="bg-green-600 text-white px-3 rounded flex-shrink-0"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                            <div id="supplierList" class="space-y-2 max-h-64 overflow-y-auto"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="page-notes" class="hidden space-y-6 fade-in pb-20">
@@ -301,34 +265,34 @@
             </main>
         </div>
 
-        <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-lg h-[80vh] flex flex-col">
-                <div class="flex justify-between items-center p-6 border-b dark:border-slate-700"><h3 class="font-bold text-xl dark:text-white">Ayarlar</h3><button onclick="closeSettings()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+        <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 z-[70] hidden flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col">
+                <div class="flex justify-between items-center p-6 border-b dark:border-slate-700 flex-shrink-0"><h3 class="font-bold text-xl dark:text-white">Ayarlar</h3><button onclick="closeSettings()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div>
                 <div class="flex-1 overflow-y-auto p-6 space-y-6 dark:text-slate-300">
                     <section>
                         <h4 class="font-bold text-indigo-600 border-b pb-2 mb-3">İşletme</h4>
                         <div class="grid grid-cols-1 gap-3">
-                            <input type="text" id="settingName" class="border p-2 rounded bg-transparent" placeholder="İşletme Adı">
-                            <input type="number" id="settingLimit" class="border p-2 rounded bg-transparent" placeholder="Puan Limiti">
-                            <input type="text" id="settingReward" class="border p-2 rounded bg-transparent" placeholder="Ödül Adı">
+                            <input type="text" id="settingName" class="border p-3 rounded bg-transparent w-full" placeholder="İşletme Adı">
+                            <input type="number" id="settingLimit" class="border p-3 rounded bg-transparent w-full" placeholder="Puan Limiti">
+                            <input type="text" id="settingReward" class="border p-3 rounded bg-transparent w-full" placeholder="Ödül Adı">
                         </div>
                     </section>
                     <section>
                         <h4 class="font-bold text-orange-600 border-b pb-2 mb-3">Masalar</h4>
-                        <div class="flex gap-2 mb-3"><input id="newTableName" placeholder="Masa Adı" class="flex-1 border p-2 rounded bg-transparent"><button onclick="addTable()" class="bg-orange-600 text-white px-4 rounded font-bold">Ekle</button></div>
+                        <div class="flex gap-2 mb-3"><input id="newTableName" placeholder="Masa Adı" class="flex-1 border p-3 rounded bg-transparent"><button onclick="addTable()" class="bg-orange-600 text-white px-4 rounded font-bold">Ekle</button></div>
                         <div id="settingsTableList" class="bg-slate-50 dark:bg-slate-700 p-2 rounded max-h-32 overflow-y-auto space-y-1"></div>
                     </section>
                     <section>
                         <h4 class="font-bold text-green-600 border-b pb-2 mb-3">Menü</h4>
-                        <div class="flex gap-2 mb-3"><input id="newProdName" placeholder="Ürün" class="flex-1 border p-2 rounded bg-transparent"><input id="newProdPrice" type="number" placeholder="Fiyat" class="w-20 border p-2 rounded bg-transparent"><button onclick="addProduct()" class="bg-green-600 text-white px-3 rounded font-bold">Ekle</button></div>
+                        <div class="flex gap-2 mb-3"><input id="newProdName" placeholder="Ürün" class="flex-1 border p-3 rounded bg-transparent"><input id="newProdPrice" type="number" placeholder="Fiyat" class="w-24 border p-3 rounded bg-transparent"><button onclick="addProduct()" class="bg-green-600 text-white px-3 rounded font-bold">Ekle</button></div>
                         <div id="settingsProductList" class="bg-slate-50 dark:bg-slate-700 p-2 rounded max-h-32 overflow-y-auto space-y-1"></div>
                     </section>
                     <section>
                         <h4 class="font-bold text-blue-600 border-b pb-2 mb-3">Yedekleme</h4>
                         <div class="grid grid-cols-1 gap-2">
-                            <button onclick="exportFinanceToExcel()" class="bg-green-600 text-white py-2 rounded text-sm">Excel Rapor İndir</button>
-                            <button onclick="exportData()" class="bg-blue-100 text-blue-700 py-2 rounded text-sm">Yedek İndir</button>
-                            <button onclick="importDataTrigger()" class="bg-slate-100 text-slate-700 py-2 rounded text-sm">Yedek Yükle</button>
+                            <button onclick="exportFinanceToExcel()" class="bg-green-600 text-white py-3 rounded text-sm">Excel Rapor İndir</button>
+                            <button onclick="exportData()" class="bg-blue-100 text-blue-700 py-3 rounded text-sm">Yedek İndir</button>
+                            <button onclick="importDataTrigger()" class="bg-slate-100 text-slate-700 py-3 rounded text-sm">Yedek Yükle</button>
                             <input type="file" id="importFile" class="hidden" onchange="importData(this)">
                         </div>
                     </section>
@@ -337,14 +301,14 @@
             </div>
         </div>
 
-        <div id="stockModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div id="stockModal" class="fixed inset-0 bg-black bg-opacity-50 z-[70] hidden flex items-center justify-center p-4">
             <div class="bg-white dark:bg-slate-800 rounded-xl p-6 w-80">
                 <h3 class="font-bold mb-4 dark:text-white">Stok Ekle</h3>
                 <div class="space-y-3">
-                    <input id="stkName" placeholder="Ürün" class="w-full p-2 border rounded bg-transparent dark:text-white">
-                    <input id="stkQty" type="number" placeholder="Miktar" class="w-full p-2 border rounded bg-transparent dark:text-white">
-                    <input id="stkUnit" placeholder="Birim" class="w-full p-2 border rounded bg-transparent dark:text-white">
-                    <input id="stkCrit" type="number" placeholder="Kritik Sınır" class="w-full p-2 border rounded bg-transparent dark:text-white">
+                    <input id="stkName" placeholder="Ürün" class="w-full p-3 border rounded bg-transparent dark:text-white">
+                    <input id="stkQty" type="number" placeholder="Miktar" class="w-full p-3 border rounded bg-transparent dark:text-white">
+                    <input id="stkUnit" placeholder="Birim" class="w-full p-3 border rounded bg-transparent dark:text-white">
+                    <input id="stkCrit" type="number" placeholder="Kritik Sınır" class="w-full p-3 border rounded bg-transparent dark:text-white">
                     <div class="flex gap-2 mt-4"><button onclick="saveStockItem()" class="flex-1 bg-amber-500 text-white py-2 rounded font-bold">Kaydet</button><button onclick="document.getElementById('stockModal').classList.add('hidden')" class="flex-1 bg-slate-200 text-slate-700 py-2 rounded font-bold">İptal</button></div>
                 </div>
             </div>
@@ -398,17 +362,17 @@
             const ADMIN_USER = "5437485476";
             const ADMIN_PASS = "N_rlozk1234";
 
-            const DB_KEY = 'esnaf_pro_cust_v17';
-            const SALES_KEY = 'esnaf_pro_sales_v17';
-            const PROD_KEY = 'esnaf_pro_prod_v17';
-            const TABLES_KEY = 'esnaf_pro_tables_v17';
-            const EXP_KEY = 'esnaf_pro_exp_v17';
-            const STOCK_KEY = 'esnaf_pro_stk_v17';
-            const NOTES_KEY = 'esnaf_pro_notes_v17';
-            const DEL_KEY = 'esnaf_pro_del_v17';
-            const SUPP_KEY = 'esnaf_pro_supp_v17';
-            const VERESIYE_KEY = 'esnaf_pro_ver_v17';
-            const SETTINGS_KEY = 'esnaf_pro_set_v17';
+            const DB_KEY = 'esnaf_pro_cust_v18';
+            const SALES_KEY = 'esnaf_pro_sales_v18';
+            const PROD_KEY = 'esnaf_pro_prod_v18';
+            const TABLES_KEY = 'esnaf_pro_tables_v18';
+            const EXP_KEY = 'esnaf_pro_exp_v18';
+            const STOCK_KEY = 'esnaf_pro_stk_v18';
+            const NOTES_KEY = 'esnaf_pro_notes_v18';
+            const DEL_KEY = 'esnaf_pro_del_v18';
+            const SUPP_KEY = 'esnaf_pro_supp_v18';
+            const VERESIYE_KEY = 'esnaf_pro_ver_v18';
+            const SETTINGS_KEY = 'esnaf_pro_set_v18';
             
             let settings = { businessName: "Cadde Hot Dog", pointLimit: 100, reward: "Sürpriz Hediye" };
             let activeTables = []; let activeTableId = null; let activeDeliveryId = null;
