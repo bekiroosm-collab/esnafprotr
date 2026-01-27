@@ -14,9 +14,22 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; }
         
-        /* Kaydırma Çubuğu İyileştirmeleri */
+        /* Mobil Uyumlu Temel Ayarlar */
+        html, body { 
+            height: 100%; 
+            overflow: hidden; /* Ana pencere kaymasın, içerik kaysın */
+            font-family: 'Inter', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* iOS ve Android için Akıcı Kaydırma */
+        .custom-scroll {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+        
+        /* Scrollbar Görünümü */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -24,7 +37,7 @@
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Mobilde inputlara tıklayınca zoom yapmasını engellemek için text-base */
+        /* Inputlara tıklayınca mobilde zoom yapmasını engelle */
         input, select, textarea { font-size: 16px !important; }
 
         .dark body { background-color: #0f172a; color: #e2e8f0; }
@@ -37,7 +50,7 @@
         .dark input, .dark select, .dark textarea { background-color: #334155; color: white; border-color: #475569; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 h-screen overflow-hidden flex flex-col">
+<body class="bg-gray-50 text-gray-800 h-[100dvh] flex flex-col">
 
     <div id="login-container" class="fixed inset-0 z-[60] bg-slate-900 flex items-center justify-center fade-in px-4">
         <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-700">
@@ -56,9 +69,9 @@
         </div>
     </div>
 
-    <div id="app-container" class="hidden h-screen flex overflow-hidden relative w-full">
+    <div id="app-container" class="hidden h-full flex overflow-hidden relative w-full">
         
-        <div id="mobile-overlay" onclick="toggleMenu()" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden transition-opacity"></div>
+        <div id="mobile-overlay" onclick="toggleMenu()" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden transition-opacity backdrop-blur-sm"></div>
 
         <div id="sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-slate-900 text-white flex flex-col justify-between shadow-2xl transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex-shrink-0">
             <div>
@@ -69,7 +82,7 @@
                     </div>
                     <button onclick="toggleMenu()" class="lg:hidden text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
-                <nav class="mt-4 space-y-1 px-2 overflow-y-auto max-h-[calc(100vh-140px)] custom-scroll">
+                <nav class="mt-4 space-y-1 px-2 overflow-y-auto max-h-[calc(100dvh-140px)] custom-scroll">
                     <a href="#" onclick="sayfaDegistir('dashboard')" class="nav-item bg-slate-800 text-white group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors"><i class="fa-solid fa-chart-pie w-6 text-center text-blue-400"></i> <span class="ml-3">Özet Rapor</span></a>
                     <a href="#" onclick="sayfaDegistir('pos')" class="nav-item text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors"><i class="fa-solid fa-cash-register w-6 text-center text-green-400"></i> <span class="ml-3">Sipariş & Kasa</span></a>
                     <a href="#" onclick="sayfaDegistir('customer')" class="nav-item text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors"><i class="fa-solid fa-users w-6 text-center text-indigo-400"></i> <span class="ml-3">Müşteriler</span></a>
@@ -87,9 +100,9 @@
             </div>
         </div>
 
-        <div class="flex-1 flex flex-col min-w-0 bg-gray-50 dark:bg-slate-950 transition-colors duration-300">
+        <div class="flex-1 flex flex-col min-w-0 bg-gray-50 dark:bg-slate-950 transition-colors duration-300 h-full">
             
-            <header class="bg-white dark:bg-slate-800 shadow-sm h-16 flex items-center justify-between px-4 lg:px-6 z-20 sticky top-0 flex-shrink-0">
+            <header class="bg-white dark:bg-slate-800 shadow-sm h-16 flex items-center justify-between px-4 lg:px-6 z-20 flex-shrink-0">
                 <div class="flex items-center">
                     <button onclick="toggleMenu()" class="lg:hidden text-slate-600 dark:text-white mr-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-slate-700">
                         <i class="fa-solid fa-bars text-xl"></i>
@@ -111,7 +124,7 @@
                 </div>
             </header>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto p-4 lg:p-6 pb-20">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto custom-scroll p-4 lg:p-6 pb-24 h-full relative">
                 
                 <div id="page-dashboard" class="space-y-6 fade-in">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -132,17 +145,17 @@
                     </div>
                 </div>
 
-                <div id="page-pos" class="hidden h-full fade-in pb-20">
+                <div id="page-pos" class="hidden h-full fade-in">
                     <div class="flex flex-col lg:flex-row gap-4 h-full">
-                        <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-64 lg:h-auto flex-shrink-0">
+                        <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-auto flex-shrink-0">
                             <div class="p-4 border-b bg-slate-50 rounded-t-xl flex justify-between items-center"><h3 class="font-bold text-slate-700">Masalar</h3><button onclick="openSettings()" class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"><i class="fa-solid fa-plus"></i></button></div>
-                            <div class="flex-1 overflow-y-auto p-4"><div id="tablesGrid" class="grid grid-cols-3 gap-2"></div></div>
+                            <div class="flex-1 overflow-y-auto p-4 max-h-64 lg:max-h-full"><div id="tablesGrid" class="grid grid-cols-3 gap-2"></div></div>
                         </div>
-                        <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col opacity-50 pointer-events-none h-80 lg:h-auto flex-shrink-0" id="productSection">
+                        <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col opacity-50 pointer-events-none h-auto flex-shrink-0" id="productSection">
                             <div class="p-4 border-b bg-slate-50 rounded-t-xl"><h3 class="font-bold text-slate-700" id="selectedTableName">Masa Seçiniz</h3></div>
-                            <div class="flex-1 overflow-y-auto p-4"><input type="text" id="searchProduct" onkeyup="filterProducts()" placeholder="Ürün Ara..." class="w-full mb-3 p-2 text-sm border rounded bg-transparent"><div id="productsGrid" class="grid grid-cols-2 gap-2"></div></div>
+                            <div class="flex-1 overflow-y-auto p-4 max-h-80 lg:max-h-full"><input type="text" id="searchProduct" onkeyup="filterProducts()" placeholder="Ürün Ara..." class="w-full mb-3 p-2 text-sm border rounded bg-transparent"><div id="productsGrid" class="grid grid-cols-2 gap-2"></div></div>
                         </div>
-                        <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col opacity-50 pointer-events-none h-auto flex-shrink-0 mb-10" id="orderSection">
+                        <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col opacity-50 pointer-events-none h-auto flex-shrink-0 mb-4" id="orderSection">
                             <div class="p-4 border-b bg-slate-50 rounded-t-xl flex justify-between"><h3 class="font-bold text-slate-700">Adisyon</h3><button onclick="clearCurrentOrder()" class="text-red-500 text-xs font-bold">TEMİZLE</button></div>
                             <div class="flex-1 overflow-y-auto p-4 min-h-[150px]"><ul id="currentOrderList" class="space-y-2"></ul></div>
                             <div class="p-4 bg-slate-50 border-t rounded-b-xl"><div class="flex justify-between mb-4"><span class="text-slate-500">Toplam</span><span class="text-2xl font-bold text-slate-800" id="orderTotal">0.00 ₺</span></div><div class="grid grid-cols-2 gap-2"><button onclick="completePayment('Nakit')" class="bg-green-600 text-white py-3 rounded font-bold shadow text-xs">NAKİT</button><button onclick="completePayment('Kredi Kartı')" class="bg-indigo-600 text-white py-3 rounded font-bold shadow text-xs">POS</button><button onclick="addVeresiye()" class="bg-rose-500 text-white py-3 rounded font-bold shadow text-xs">VERESİYE</button><button onclick="sendToKitchen()" class="bg-blue-500 text-white py-3 rounded font-bold shadow text-xs">MUTFAK</button></div></div>
@@ -150,7 +163,7 @@
                     </div>
                 </div>
 
-                <div id="page-customer" class="hidden space-y-6 fade-in pb-20">
+                <div id="page-customer" class="hidden space-y-6 fade-in">
                     <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
                         <div class="bg-slate-50 px-6 py-4 border-b border-slate-200"><h3 class="font-bold text-slate-700"><i class="fa-solid fa-star text-yellow-500 mr-2"></i>Puan Yükle</h3></div>
                         <div class="p-6">
@@ -167,11 +180,11 @@
                     </div>
                 </div>
 
-                <div id="page-marketing" class="hidden h-full fade-in pb-20">
+                <div id="page-marketing" class="hidden h-full fade-in">
                     <div class="flex flex-col lg:flex-row gap-6 h-full">
-                        <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-96 lg:h-auto">
+                        <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-auto flex-shrink-0">
                             <div class="p-4 border-b bg-slate-50 rounded-t-xl"><h3 class="font-bold text-slate-700">1. Alıcı Seçimi</h3><input type="text" id="marketingSearch" onkeyup="renderMarketingList()" placeholder="Ara..." class="w-full mt-2 p-2 border rounded text-xs bg-white"></div>
-                            <div id="marketingCustomerList" class="flex-1 overflow-y-auto p-2 space-y-1"></div>
+                            <div id="marketingCustomerList" class="flex-1 overflow-y-auto p-2 space-y-1 max-h-64 lg:max-h-full"></div>
                         </div>
                         <div class="lg:w-2/3 flex flex-col gap-6">
                             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex-1 flex flex-col">
@@ -186,11 +199,11 @@
                     </div>
                 </div>
 
-                <div id="page-delivery" class="hidden h-full fade-in pb-20">
+                <div id="page-delivery" class="hidden h-full fade-in">
                     <div class="flex flex-col lg:flex-row gap-6 h-full">
-                        <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col p-4 h-64 lg:h-auto">
+                        <div class="lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col p-4 h-auto flex-shrink-0">
                             <h3 class="font-bold text-slate-700 mb-4 flex justify-between"><span>Paketler</span><button onclick="createNewDelivery()" class="bg-red-500 text-white px-3 py-1 rounded text-xs">Yeni</button></h3>
-                            <div id="deliveryList" class="flex-1 overflow-y-auto space-y-3"></div>
+                            <div id="deliveryList" class="flex-1 overflow-y-auto space-y-3 max-h-64 lg:max-h-full"></div>
                         </div>
                         <div class="lg:w-2/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col p-6 hidden" id="deliveryDetailPanel">
                             <div class="flex justify-between items-start border-b pb-4 mb-4"><div><h2 class="text-2xl font-bold text-slate-800" id="delDetName">Müşteri</h2><p class="text-sm text-slate-500" id="delDetAddress">Adres</p></div><div class="text-right"><span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold" id="delDetStatus">Hazırlanıyor</span></div></div>
@@ -200,19 +213,19 @@
                     </div>
                 </div>
 
-                <div id="page-kitchen" class="hidden fade-in h-full pb-20">
+                <div id="page-kitchen" class="hidden fade-in h-full">
                     <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-slate-700">Mutfak</h3></div>
-                    <div id="kitchenGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto h-full"></div>
+                    <div id="kitchenGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto h-full pb-10"></div>
                 </div>
 
-                <div id="page-veresiye" class="hidden space-y-6 fade-in pb-20">
+                <div id="page-veresiye" class="hidden space-y-6 fade-in">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200"><h3 class="font-bold text-slate-700 mb-4 border-b pb-2">Borç Ekle</h3><div class="space-y-3"><input id="verName" placeholder="Müşteri" class="w-full p-2 border rounded"><input id="verAmount" type="number" placeholder="Tutar" class="w-full p-2 border rounded"><input id="verNote" placeholder="Not" class="w-full p-2 border rounded"><button onclick="addVeresiyeRecord()" class="w-full bg-rose-500 text-white py-2 rounded font-bold">Kaydet</button></div></div>
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col h-96"><h3 class="font-bold text-slate-700 mb-4 flex justify-between"><span>Veresiye</span><span id="totalVeresiye" class="text-rose-600">0 ₺</span></h3><div id="veresiyeList" class="flex-1 overflow-y-auto space-y-2"></div></div>
                     </div>
                 </div>
 
-                <div id="page-finance" class="hidden space-y-6 fade-in pb-20">
+                <div id="page-finance" class="hidden space-y-6 fade-in">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                         <h3 class="font-bold text-slate-700 mb-4 text-sm uppercase">Bugünün Durumu</h3>
                         <div class="grid grid-cols-2 gap-4">
@@ -240,7 +253,7 @@
                     </div>
                 </div>
 
-                <div id="page-stock" class="hidden space-y-6 fade-in pb-20">
+                <div id="page-stock" class="hidden space-y-6 fade-in">
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                             <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-slate-700">Envanter</h3><button onclick="openStockModal()" class="bg-amber-500 text-white px-3 py-1 rounded text-xs font-bold">Ekle</button></div>
@@ -258,7 +271,7 @@
                     </div>
                 </div>
 
-                <div id="page-notes" class="hidden space-y-6 fade-in pb-20">
+                <div id="page-notes" class="hidden space-y-6 fade-in">
                     <div class="flex justify-between items-center"><h3 class="font-bold text-slate-700 text-xl">📌 Pano</h3><button onclick="addNote()" class="bg-yellow-400 text-yellow-900 px-4 py-2 rounded-lg font-bold shadow">Not Yapıştır</button></div><div id="notesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
                 </div>
 
@@ -268,7 +281,7 @@
         <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 z-[70] hidden flex items-center justify-center p-4">
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col">
                 <div class="flex justify-between items-center p-6 border-b dark:border-slate-700 flex-shrink-0"><h3 class="font-bold text-xl dark:text-white">Ayarlar</h3><button onclick="closeSettings()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div>
-                <div class="flex-1 overflow-y-auto p-6 space-y-6 dark:text-slate-300">
+                <div class="flex-1 overflow-y-auto custom-scroll p-6 space-y-6 dark:text-slate-300">
                     <section>
                         <h4 class="font-bold text-indigo-600 border-b pb-2 mb-3">İşletme</h4>
                         <div class="grid grid-cols-1 gap-3">
@@ -319,33 +332,20 @@
             function toggleMenu() {
                 const sidebar = document.getElementById('sidebar');
                 const overlay = document.getElementById('mobile-overlay');
-                
                 if (sidebar.classList.contains('-translate-x-full')) {
-                    sidebar.classList.remove('-translate-x-full'); // Menüyü aç
-                    overlay.classList.remove('hidden'); // Arkaplanı karart
+                    sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden');
                 } else {
-                    sidebar.classList.add('-translate-x-full'); // Menüyü kapat
-                    overlay.classList.add('hidden'); // Arkaplanı aç
+                    sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden');
                 }
             }
-
-            // Sayfa değişince mobilde menüyü otomatik kapat
             function sayfaDegistir(id) {
                 document.querySelectorAll('main > div').forEach(e => e.classList.add('hidden'));
                 const target = document.getElementById(`page-${id}`);
                 if(target) target.classList.remove('hidden');
-                
-                // Menü aktiflik durumu
                 document.querySelectorAll('.nav-item').forEach(el => { el.classList.remove('bg-slate-800', 'text-white'); el.classList.add('text-slate-300'); });
                 const activeLinks = document.querySelectorAll(`.nav-item`);
                 activeLinks.forEach(link => { if(link.getAttribute('onclick').includes(id)) { link.classList.add('bg-slate-800', 'text-white'); link.classList.remove('text-slate-300'); }});
-
-                if(window.innerWidth < 1024) { // Sadece mobilde kapat
-                    document.getElementById('sidebar').classList.add('-translate-x-full');
-                    document.getElementById('mobile-overlay').classList.add('hidden');
-                }
-
-                // Sayfa özel fonksiyonları
+                if(window.innerWidth < 1024) { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('mobile-overlay').classList.add('hidden'); }
                 if(id === 'dashboard') renderDashboard();
                 if(id === 'pos') { renderTables(); }
                 if(id === 'customer') { renderCustomerTable(); }
@@ -362,17 +362,17 @@
             const ADMIN_USER = "5437485476";
             const ADMIN_PASS = "N_rlozk1234";
 
-            const DB_KEY = 'esnaf_pro_cust_v18';
-            const SALES_KEY = 'esnaf_pro_sales_v18';
-            const PROD_KEY = 'esnaf_pro_prod_v18';
-            const TABLES_KEY = 'esnaf_pro_tables_v18';
-            const EXP_KEY = 'esnaf_pro_exp_v18';
-            const STOCK_KEY = 'esnaf_pro_stk_v18';
-            const NOTES_KEY = 'esnaf_pro_notes_v18';
-            const DEL_KEY = 'esnaf_pro_del_v18';
-            const SUPP_KEY = 'esnaf_pro_supp_v18';
-            const VERESIYE_KEY = 'esnaf_pro_ver_v18';
-            const SETTINGS_KEY = 'esnaf_pro_set_v18';
+            const DB_KEY = 'esnaf_pro_cust_v19';
+            const SALES_KEY = 'esnaf_pro_sales_v19';
+            const PROD_KEY = 'esnaf_pro_prod_v19';
+            const TABLES_KEY = 'esnaf_pro_tables_v19';
+            const EXP_KEY = 'esnaf_pro_exp_v19';
+            const STOCK_KEY = 'esnaf_pro_stk_v19';
+            const NOTES_KEY = 'esnaf_pro_notes_v19';
+            const DEL_KEY = 'esnaf_pro_del_v19';
+            const SUPP_KEY = 'esnaf_pro_supp_v19';
+            const VERESIYE_KEY = 'esnaf_pro_ver_v19';
+            const SETTINGS_KEY = 'esnaf_pro_set_v19';
             
             let settings = { businessName: "Cadde Hot Dog", pointLimit: 100, reward: "Sürpriz Hediye" };
             let activeTables = []; let activeTableId = null; let activeDeliveryId = null;
@@ -453,10 +453,10 @@
                     if(name) customer.name = name; 
                     customer.points += 10; customer.visits += 1; customer.lastVisit = Date.now(); puan = customer.points; 
                     message = `Sayın ${customer.name || 'Müşterimiz'}, ${dukkanIsmi} olarak bizi tercih ettiğiniz için teşekkürler! Puanınız: ${puan}.`; 
-                    if(puan >= settings.pointLimit) message = `Tebrikler Sayın ${customer.name || 'Müşterimiz'}! ${dukkanIsmi} üyeliğinizde ${puan} puana ulaştınız. 🎁 **${odulAdi}** kazandınız! Kasadan alabilirsiniz.`; 
+                    if(puan >= settings.pointLimit) message = `Tebrikler Sayın ${customer.name || 'Müşterimiz'}! ${dukkanIsmi} üyeliğinizde ${puan} puana ulaştınız. 🎁 **${odulAdi}** kazandınız! Dükkanımıza bekleriz <3`; 
                 } else { 
                     customer = { id: Date.now(), tel: tel, name: name || "Değerli Müşterimiz", points: 10, visits: 1, firstVisit: Date.now(), lastVisit: Date.now() }; db.push(customer); 
-                    message = `Hoş geldiniz! ${dukkanIsmi} sadakat sistemine kaydınız yapıldı. İlk 10 puanınız yüklendi!`; 
+                    message = `Hoş geldiniz! ${dukkanIsmi} puan sistemine kaydınız yapıldı. İlk 10 puanınız yüklendi! 100 Puanda hediyelerimiz mevcuttur. İyi günler dileriz.`; 
                 }
                 setStorage(DB_KEY, db); telInput.value = ''; nameInput.value = ''; renderCustomerTable();
                 if(confirm("Puan kaydedildi! WhatsApp mesajı gönderilsin mi?")) { window.open(`https://wa.me/90${tel}?text=${encodeURIComponent(message)}`, '_blank'); }
