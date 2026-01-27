@@ -490,49 +490,52 @@
     </section>
 
     <section id="iletisim" class="contact-section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8" data-aos="zoom-in">
-                    <div class="text-center mb-4">
-                        <h2 class="fw-bold">Hemen Başvurun, İşinizi Büyütün</h2>
-                        <p class="text-white-50">Formu doldurun, uzman ekibimiz sizi arayıp sistemin kurulumunu ve
-                            tanıtımını yapsın.</p>
-                    </div>
-                    <form action="https://formspree.io/f/mdagbzpe" method="POST" id="purchaseForm"
-                        class="p-4 rounded border border-secondary" style="background: rgba(0,0,0,0.3);">
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label text-white-50">Adınız Soyadınız</label>
-                                <input type="text" class="form-control" required placeholder="İsim Soyisim">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label text-white-50">İşletme Adı</label>
-                                <input type="text" class="form-control" required placeholder="Dükkanınızın Adı">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-white-50">Telefon Numaranız</label>
-                            <input type="tel" class="form-control" required placeholder="05XX XXX XX XX">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-white-50">Seçtiğiniz Paket</label>
-                            <select class="form-select" id="packageSelect">
-                                <option value="Basic">Basic Paket (1.000 TL)</option>
-                                <option value="Medium">Medium Paket (2.000 TL)</option>
-                                <option value="Platinum">Platinum Paket (3.000 TL)</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label text-white-50">Varsa Eklemek İstedikleriniz</label>
-                            <textarea class="form-control" rows="3" placeholder="Mesajınız..."></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-gradient w-100 btn-lg fw-bold">BAŞVURU GÖNDER</button>
-                    </form>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8" data-aos="zoom-in">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold">Hemen Başvurun, İşinizi Büyütün</h2>
+                    <p class="text-white-50">Formu doldurun, uzman ekibimiz sizi arayıp sistemin kurulumunu ve tanıtımını yapsın.</p>
                 </div>
+
+                <form action="https://formspree.io/f/mdagbzpe" method="POST" id="purchaseForm" class="p-4 rounded border border-secondary" style="background: rgba(0,0,0,0.3);">
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white-50">Adınız Soyadınız</label>
+                            <input type="text" name="ad_soyad" class="form-control" required placeholder="İsim Soyisim">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white-50">İşletme Adı</label>
+                            <input type="text" name="isletme_adi" class="form-control" required placeholder="Dükkanınızın Adı">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-white-50">Telefon Numaranız</label>
+                        <input type="tel" name="telefon" class="form-control" required placeholder="05XX XXX XX XX">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-white-50">Seçtiğiniz Paket</label>
+                        <select class="form-select" id="packageSelect" name="paket">
+                            <option value="Basic">Basic Paket (1.000 TL)</option>
+                            <option value="Medium">Medium Paket (2.000 TL)</option>
+                            <option value="Platinum">Platinum Paket (3.000 TL)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-white-50">Varsa Eklemek İstedikleriniz</label>
+                        <textarea class="form-control" name="mesaj" rows="3" placeholder="Mesajınız..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-gradient w-100 btn-lg fw-bold">BAŞVURU GÖNDER</button>
+                </form>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <footer class="bg-black text-white py-4 text-center">
         <div class="container">
@@ -573,3 +576,4 @@
 </body>
 
 </html>
+
