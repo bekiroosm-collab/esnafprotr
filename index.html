@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Esnaf Pro - İşletmenizin Dijital Beyni</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -30,9 +31,15 @@
         .navbar {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
         }
-        .nav-link { font-weight: 500; color: #333 !important; margin-left: 15px; }
+
+        .nav-link {
+            font-weight: 500;
+            color: #333 !important;
+            margin-left: 15px;
+        }
+
         .btn-gradient {
             background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
             color: white;
@@ -41,6 +48,7 @@
             border-radius: 50px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .btn-gradient:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
@@ -54,6 +62,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .hero h1 {
             font-size: 3.5rem;
             font-weight: 800;
@@ -62,30 +71,34 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         .hero-img-box {
             position: relative;
             z-index: 2;
         }
+
         .hero-img-box img {
             border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
             border: 5px solid white;
         }
-        
+
         /* Özellik Kutuları */
         .feature-card {
             background: white;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
             height: 100%;
             border-bottom: 5px solid transparent;
         }
+
         .feature-card:hover {
             transform: translateY(-10px);
             border-bottom: 5px solid var(--primary-color);
         }
+
         .icon-box {
             width: 70px;
             height: 70px;
@@ -100,10 +113,13 @@
         }
 
         /* Detaylı Açıklama Bölümü */
-        .detail-section { padding: 80px 0; }
+        .detail-section {
+            padding: 80px 0;
+        }
+
         .detail-img {
             border-radius: 15px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
         }
 
         /* Paketler */
@@ -112,22 +128,51 @@
             border-radius: 20px;
             padding: 40px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             position: relative;
             transition: 0.3s;
             overflow: hidden;
         }
+
         .pricing-card.popular {
             border: 2px solid var(--primary-color);
             transform: scale(1.05);
             z-index: 2;
         }
-        .pricing-card:hover { transform: translateY(-10px); }
-        .price { font-size: 3rem; font-weight: 700; color: #333; }
-        .price span { font-size: 1rem; color: #777; font-weight: 400; }
-        .feature-list { list-style: none; padding: 0; margin: 30px 0; text-align: left; }
-        .feature-list li { margin-bottom: 15px; display: flex; align-items: center; }
-        .feature-list li i { margin-right: 10px; }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: #777;
+            font-weight: 400;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .feature-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li i {
+            margin-right: 10px;
+        }
+
         .badge-popular {
             position: absolute;
             top: 20px;
@@ -146,21 +191,28 @@
             color: white;
             padding: 80px 0;
         }
-        .form-control, .form-select {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+
+        .form-control,
+        .form-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
             padding: 15px;
             border-radius: 10px;
         }
-        .form-control:focus, .form-select:focus {
-            background: rgba(255,255,255,0.2);
+
+        .form-control:focus,
+        .form-select:focus {
+            background: rgba(255, 255, 255, 0.2);
             color: white;
             box-shadow: none;
             border-color: var(--primary-color);
         }
-        .form-control::placeholder { color: rgba(255,255,255,0.5); }
-        
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
         /* Floating Whatsapp Button */
         .whatsapp-float {
             position: fixed;
@@ -175,15 +227,19 @@
             align-items: center;
             justify-content: center;
             font-size: 30px;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             transition: 0.3s;
             text-decoration: none;
         }
-        .whatsapp-float:hover { transform: scale(1.1); color: white; }
 
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            color: white;
+        }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar navbar-expand-lg fixed-top">
@@ -215,7 +271,9 @@
                         <i class="fas fa-check-circle me-2"></i>Esnaflar için 1 Numaralı Çözüm
                     </div>
                     <h1>Müşterileriniz Uygulamada Kalmasın, <br> <span class="text-primary">Sizin Olsun!</span></h1>
-                    <p class="lead text-muted my-4">Yemeksepeti, Getir veya Trendyol... Sipariş nereden gelirse gelsin, müşteriyi kendi veri tabanınıza kaydedin. Otomatik WhatsApp mesajlarıyla sadık müşteriler yaratın.</p>
+                    <p class="lead text-muted my-4">Yemeksepeti, Getir veya Trendyol... Sipariş nereden gelirse gelsin,
+                        müşteriyi kendi veri tabanınıza kaydedin. Otomatik WhatsApp mesajlarıyla sadık müşteriler
+                        yaratın.</p>
                     <div class="d-flex gap-3">
                         <a href="#paketler" class="btn btn-gradient btn-lg">Paketleri İncele</a>
                         <a href="#nasil-calisir" class="btn btn-outline-dark btn-lg rounded-pill">Nasıl Çalışır?</a>
@@ -227,8 +285,11 @@
                 <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left" data-aos-duration="1000">
                     <div class="hero-img-box">
                         <img src="plat/plat1.png" alt="Esnaf Pro Panel" class="img-fluid w-100">
-                        <div style="position: absolute; bottom: -20px; left: -20px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 15px;">
-                            <div style="width: 50px; height: 50px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;"><i class="fab fa-whatsapp"></i></div>
+                        <div
+                            style="position: absolute; bottom: -20px; left: -20px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 15px;">
+                            <div
+                                style="width: 50px; height: 50px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                                <i class="fab fa-whatsapp"></i></div>
                             <div>
                                 <div class="fw-bold">Otomatik Mesaj</div>
                                 <div class="text-muted small">Tebrikler 10 Puan Kazandınız!</div>
@@ -254,7 +315,9 @@
                 <div class="col-lg-6 order-lg-1" data-aos="fade-right">
                     <div class="icon-box"><i class="fas fa-database"></i></div>
                     <h3>1. Veri Havuzunuzu Oluşturun</h3>
-                    <p class="text-muted fs-5">Dükkanınıza Yemeksepeti, Getir veya Trendyol'dan sipariş geldiğinde, müşterinin numarasını Esnaf Pro paneline girersiniz. Böylece o müşteri artık sadece uygulamanın değil, <strong>sizin müşteriniz olur.</strong></p>
+                    <p class="text-muted fs-5">Dükkanınıza Yemeksepeti, Getir veya Trendyol'dan sipariş geldiğinde,
+                        müşterinin numarasını Esnaf Pro paneline girersiniz. Böylece o müşteri artık sadece uygulamanın
+                        değil, <strong>sizin müşteriniz olur.</strong></p>
                 </div>
             </div>
 
@@ -263,9 +326,12 @@
                     <img src="2.png" class="img-fluid detail-img" alt="WhatsApp Mesajı">
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
-                    <div class="icon-box" style="background: rgba(37, 211, 102, 0.1); color: #25D366;"><i class="fab fa-whatsapp"></i></div>
+                    <div class="icon-box" style="background: rgba(37, 211, 102, 0.1); color: #25D366;"><i
+                            class="fab fa-whatsapp"></i></div>
                     <h3>2. Otomatik Puan & WhatsApp</h3>
-                    <p class="text-muted fs-5">Numarayı girdiğiniz an sistem müşteriye otomatik bir WhatsApp mesajı atar: <br> <em>"Tebrikler! İşletmemizden 10 puan kazandınız. 100 puanda Hamburger Menü Hediye!"</em> <br>Bu sayede müşteri bir sonraki siparişi komisyonsuz direkt size verir.</p>
+                    <p class="text-muted fs-5">Numarayı girdiğiniz an sistem müşteriye otomatik bir WhatsApp mesajı
+                        atar: <br> <em>"Tebrikler! İşletmemizden 10 puan kazandınız. 100 puanda Hamburger Menü
+                            Hediye!"</em> <br>Bu sayede müşteri bir sonraki siparişi komisyonsuz direkt size verir.</p>
                 </div>
             </div>
 
@@ -274,9 +340,12 @@
                     <img src="3.png" class="img-fluid detail-img" alt="Uyuyan Müşteri">
                 </div>
                 <div class="col-lg-6 order-lg-1" data-aos="fade-right">
-                    <div class="icon-box" style="background: rgba(255, 71, 87, 0.1); color: #ff4757;"><i class="fas fa-bell"></i></div>
+                    <div class="icon-box" style="background: rgba(255, 71, 87, 0.1); color: #ff4757;"><i
+                            class="fas fa-bell"></i></div>
                     <h3>3. Uyuyan Müşteriyi Uyandırın</h3>
-                    <p class="text-muted fs-5">Sistem, son 30 gündür sipariş vermeyen müşterileri otomatik tespit eder ("Uyuyan Müşteri"). Tek tuşla onlara; <br> <em>"Seni Özledik! Bu hafta gelirsen %10 İndirim bizden"</em> mesajı atarak kaybedilen ciroyu geri kazandırır.</p>
+                    <p class="text-muted fs-5">Sistem, son 30 gündür sipariş vermeyen müşterileri otomatik tespit eder
+                        ("Uyuyan Müşteri"). Tek tuşla onlara; <br> <em>"Seni Özledik! Bu hafta gelirsen %10 İndirim
+                            bizden"</em> mesajı atarak kaybedilen ciroyu geri kazandırır.</p>
                 </div>
             </div>
         </div>
@@ -293,35 +362,40 @@
                     <div class="feature-card text-center">
                         <i class="fas fa-chart-pie text-primary fs-1 mb-3"></i>
                         <h4>Gelişmiş Raporlar</h4>
-                        <p class="text-muted small">Günlük ve Aylık ciro takibi. Hangi ürün çok satıyor, ne kadar kar ettiniz anında görün.</p>
+                        <p class="text-muted small">Günlük ve Aylık ciro takibi. Hangi ürün çok satıyor, ne kadar kar
+                            ettiniz anında görün.</p>
                     </div>
                 </div>
                 <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
                     <div class="feature-card text-center">
                         <i class="fas fa-utensils text-warning fs-1 mb-3"></i>
                         <h4>Masa & Sipariş</h4>
-                        <p class="text-muted small">Hangi masada ne yeniyor? Masa ekleyin, sipariş girin, hesabı kolayca alın.</p>
+                        <p class="text-muted small">Hangi masada ne yeniyor? Masa ekleyin, sipariş girin, hesabı kolayca
+                            alın.</p>
                     </div>
                 </div>
                 <div class="col-md-4" data-aos="zoom-in" data-aos-delay="300">
                     <div class="feature-card text-center">
                         <i class="fas fa-book text-danger fs-1 mb-3"></i>
                         <h4>Veresiye Defteri</h4>
-                        <p class="text-muted small">Kara kaplı defteri atın. Borçlu listesini dijitalde tutun, ödeme günlerini kaçırmayın.</p>
+                        <p class="text-muted small">Kara kaplı defteri atın. Borçlu listesini dijitalde tutun, ödeme
+                            günlerini kaçırmayın.</p>
                     </div>
                 </div>
                 <div class="col-md-4" data-aos="zoom-in" data-aos-delay="400">
                     <div class="feature-card text-center">
                         <i class="fas fa-calculator text-success fs-1 mb-3"></i>
                         <h4>Maliyet Hesabı</h4>
-                        <p class="text-muted small">Ürünün maliyetini ve satış fiyatını girin, sistem net karınızı hesaplasın.</p>
+                        <p class="text-muted small">Ürünün maliyetini ve satış fiyatını girin, sistem net karınızı
+                            hesaplasın.</p>
                     </div>
                 </div>
                 <div class="col-md-4" data-aos="zoom-in" data-aos-delay="500">
                     <div class="feature-card text-center">
                         <i class="fas fa-bullhorn text-info fs-1 mb-3"></i>
                         <h4>Toplu Duyuru</h4>
-                        <p class="text-muted small">Tüm müşterilerinize kampanya veya duyuru mesajlarını tek seferde gönderin.</p>
+                        <p class="text-muted small">Tüm müşterilerinize kampanya veya duyuru mesajlarını tek seferde
+                            gönderin.</p>
                     </div>
                 </div>
                 <div class="col-md-4" data-aos="zoom-in" data-aos-delay="600">
@@ -341,7 +415,7 @@
                 <h6 class="text-primary fw-bold">PAKETLER</h6>
                 <h2 class="fw-bold">İşletmenize Uygun Paketi Seçin</h2>
             </div>
-            
+
             <div class="row align-items-center">
                 <div class="col-lg-4 mb-4" data-aos="fade-right">
                     <div class="pricing-card">
@@ -358,10 +432,11 @@
                             <li class="text-muted opacity-50"><i class="fas fa-times-circle"></i> Özet Raporlar</li>
                             <li class="text-muted opacity-50"><i class="fas fa-times-circle"></i> Masa & Sipariş</li>
                         </ul>
-                        <a href="#iletisim" onclick="setPackage('Basic')" class="btn btn-outline-dark w-100 rounded-pill">Basic Seç</a>
-                    <a href="basic.html" class="btn btn-link text-secondary text-decoration-none w-100">
-    <i class="fas fa-info-circle me-1"></i> Detayları Gör
-</a>
+                        <a href="#iletisim" onclick="setPackage('Basic')"
+                            class="btn btn-outline-dark w-100 rounded-pill">Basic Seç</a>
+                        <a href="basic.html" class="btn btn-link text-secondary text-decoration-none w-100">
+                            <i class="fas fa-info-circle me-1"></i> Detayları Gör
+                        </a>
                     </div>
                 </div>
 
@@ -378,12 +453,14 @@
                             <li><i class="fas fa-check-circle text-success"></i> Sipariş & Kasa Yönetimi</li>
                             <li><i class="fas fa-check-circle text-success"></i> Masa Ekleme / Çıkarma</li>
                             <li><i class="fas fa-check-circle text-success"></i> Ürün & Menü Yönetimi</li>
-                            <li class="text-muted opacity-50"><i class="fas fa-times-circle"></i> Finans & Gider Takibi</li>
+                            <li class="text-muted opacity-50"><i class="fas fa-times-circle"></i> Finans & Gider Takibi
+                            </li>
                         </ul>
-                        <a href="#iletisim" onclick="setPackage('Medium')" class="btn btn-primary w-100 rounded-pill">Medium Seç</a>
-                  <a href="medium.html" class="btn btn-link text-secondary text-decoration-none w-100">
-    <i class="fas fa-info-circle me-1"></i> Detayları Gör
-</a>
+                        <a href="#iletisim" onclick="setPackage('Medium')"
+                            class="btn btn-primary w-100 rounded-pill">Medium Seç</a>
+                        <a href="medium.html" class="btn btn-link text-secondary text-decoration-none w-100">
+                            <i class="fas fa-info-circle me-1"></i> Detayları Gör
+                        </a>
                     </div>
                 </div>
 
@@ -401,10 +478,11 @@
                             <li><i class="fas fa-check-circle text-warning"></i> Basit Maliyet Hesabı</li>
                             <li><i class="fas fa-check-circle text-warning"></i> Pano & Notlar</li>
                         </ul>
-                        <a href="#iletisim" onclick="setPackage('Platinum')" class="btn btn-warning w-100 rounded-pill fw-bold">Platinum Seç</a>
-                    <a href="plat.html" class="btn btn-link text-secondary text-decoration-none w-100">
-    <i class="fas fa-info-circle me-1"></i> Detayları Gör
-</a>
+                        <a href="#iletisim" onclick="setPackage('Platinum')"
+                            class="btn btn-warning w-100 rounded-pill fw-bold">Platinum Seç</a>
+                        <a href="plat.html" class="btn btn-link text-secondary text-decoration-none w-100">
+                            <i class="fas fa-info-circle me-1"></i> Detayları Gör
+                        </a>
                     </div>
                 </div>
             </div>
@@ -417,9 +495,12 @@
                 <div class="col-lg-8" data-aos="zoom-in">
                     <div class="text-center mb-4">
                         <h2 class="fw-bold">Hemen Başvurun, İşinizi Büyütün</h2>
-                        <p class="text-white-50">Formu doldurun, uzman ekibimiz sizi arayıp sistemin kurulumunu ve tanıtımını yapsın.</p>
+                        <p class="text-white-50">Formu doldurun, uzman ekibimiz sizi arayıp sistemin kurulumunu ve
+                            tanıtımını yapsın.</p>
                     </div>
-                    <form id="purchaseForm" class="p-4 rounded border border-secondary" style="background: rgba(0,0,0,0.3);">
+                    <form action="https://formspree.io/f/mdagbzpe" method="POST" id="purchaseForm"
+                        class="p-4 rounded border border-secondary" style="background: rgba(0,0,0,0.3);">
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-white-50">Adınız Soyadınız</label>
@@ -484,10 +565,11 @@
         }
 
         // Form Gönderme Simülasyonu
-        document.getElementById('purchaseForm').addEventListener('submit', function(e) {
+        document.getElementById('purchaseForm').addEventListener('submit', function (e) {
             e.preventDefault();
             alert("Başvurunuz alınmıştır! Ekibimiz en kısa sürede sizinle iletişime geçecektir.");
         });
     </script>
 </body>
+
 </html>
