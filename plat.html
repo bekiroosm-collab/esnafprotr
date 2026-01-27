@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platinum Paket Detayları - Esnaf Pro</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --dark-bg: #0b0c15;
+            --gold-color: #ffc107; /* Platinum'a özel Gold rengi */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        .btn-gradient {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            transition: transform 0.3s ease;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            color: white;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Hero Section */
+        .page-header {
+            background: linear-gradient(135deg, #212529 0%, #000000 100%); /* Siyah tema */
+            padding: 100px 0 60px 0;
+            text-align: center;
+            color: white;
+        }
+        .page-header h1 {
+            font-weight: 800;
+        }
+        .page-header span {
+            color: var(--gold-color);
+        }
+
+        /* Feature Row */
+        .feature-row {
+            padding: 60px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .feature-row:last-child { border-bottom: none; }
+        
+        .screenshot-box {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border: 5px solid white;
+            transition: 0.3s;
+        }
+        .screenshot-box:hover {
+            transform: scale(1.02);
+        }
+        .screenshot-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .step-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(255, 193, 7, 0.2); /* Gold Opacity */
+            line-height: 1;
+            margin-bottom: -20px;
+            position: relative;
+            z-index: 0;
+        }
+        .feature-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Highlight text inside descriptions */
+        .highlight {
+            background-color: rgba(255, 193, 7, 0.2);
+            padding: 0 5px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3" href="index.html">
+                <i class="fas fa-rocket text-primary me-2"></i>Esnaf<span class="text-primary">Pro</span>
+            </a>
+            <div class="ms-auto">
+                <a href="index.html" class="btn btn-outline-dark rounded-pill me-2">
+                    <i class="fas fa-arrow-left me-1"></i> Geri Dön
+                </a>
+                <a href="index.html#iletisim" class="btn btn-gradient">Satın Al</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <div class="badge bg-warning text-dark mb-3 px-3 py-2 fw-bold"><i class="fas fa-crown me-1"></i> VIP Paket</div>
+            <h1 class="display-4">Platinum Paket <br><span>Tam Profesyonel Yönetim</span></h1>
+            <p class="lead text-white-50 mt-3 w-75 mx-auto">Sadece cironuzu değil, cebinize kalan net kârı görün. Finans takibi, veresiye defteri ve maliyet hesabı ile işinizin patronu olun.</p>
+        </div>
+    </header>
+
+    <section class="feature-row bg-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-2" data-aos="fade-left">
+                    <div class="screenshot-box">
+                        <img src="plat/plat3.png" alt="Finans Paneli">
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-1" data-aos="fade-right">
+                    <div class="step-number">01</div>
+                    <div class="feature-content ps-3">
+                        <h2 class="fw-bold mb-3">Ay Sonunda <span class="text-warning">Cebinize Ne Kalıyor?</span></h2>
+                        <p class="text-muted fs-5">
+                            Ciro yapmak güzeldir ama önemli olan kârdır. Platinum paket, dükkanınızın muhasebecisi gibi çalışır.
+                        </p>
+                        <ul class="list-unstyled mt-4">
+                            <li class="mb-3">
+                                <i class="fas fa-wallet text-warning fs-4 me-3"></i>
+                                <strong>Otomatik Gelir-Gider Hesabı:</strong> Satışlarınız "Gelir" olarak, girdiğiniz masraflar (kira, fatura, malzeme) "Gider" olarak işlenir.
+                            </li>
+                            <li class="d-flex align-items-center p-3 border rounded border-warning bg-light">
+                                <i class="fas fa-calculator text-dark fs-3 me-3"></i>
+                                <div>
+                                    <h5 class="fw-bold m-0">NET KÂR:</h5>
+                                    <p class="small text-muted m-0">Sistem otomatik hesaplar: <br> (Toplam Gelir) - (Giderler) = <strong>Net Kazancınız</strong></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <section class="feature-row">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="screenshot-box">
+                        <img src="https://via.placeholder.com/800x500/ffc107/333333?text=Panel:+Maliyet+Hesaplama" alt="Maliyet Hesabı">
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="step-number">02</div>
+                    <div class="feature-content ps-3">
+                        <h2 class="fw-bold mb-3">Maliyet Hesabı <span class="text-warning">(Zarar Etmeye Son)</span></h2>
+                        <p class="text-muted fs-5">
+                            Bir ürünü kaça satıyorsunuz, size maliyeti ne kadar? Bunu bilmeden fiyat belirlemek kumardır.
+                        </p>
+                        <p class="text-muted">
+                            Basit Maliyet bölümüne girersiniz: <br>
+                            1. Satış Fiyatı: <strong>100 TL</strong> <br>
+                            2. Maliyet (Hammadde vb.): <strong>60 TL</strong>
+                        </p>
+                        <div class="alert alert-warning border-0 shadow-sm mt-3 text-dark">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Sistem size anında söyler: <strong>"Bu üründen %40 kâr ediyorsun."</strong> Böylece asla maliyetinin altına satış yapmazsınız.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="feature-row bg-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-2" data-aos="fade-left">
+                    <div class="screenshot-box">
+                        <img src="https://via.placeholder.com/800x500/212529/ffffff?text=Panel:+Dijital+Veresiye+Defteri" alt="Veresiye Defteri">
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-1" data-aos="fade-right">
+                    <div class="step-number">03</div>
+                    <div class="feature-content ps-3">
+                        <h2 class="fw-bold mb-3">Kara Kaplı Defteri <span class="text-dark">Çöpe Atın!</span></h2>
+                        <p class="text-muted fs-5">
+                            Kimden ne kadar alacağınız var? Defter kaybolursa paralar gider mi? Dijital Veresiye Defteri ile kayıtlar güvende.
+                        </p>
+                        <ul class="list-unstyled mt-4">
+                            <li class="mb-3">
+                                <i class="fas fa-user-clock text-secondary me-2"></i>
+                                <strong>Kolay Ekleme:</strong> Borçlu kişinin ismini ve tutarı yazın, listeye eklensin.
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-hand-holding-usd text-success me-2"></i>
+                                <strong>Tahsilat:</strong> Ödeme yapıldığında tutarı düşün veya borcu tamamen silin.
+                            </li>
+                            <li class="text-muted small">
+                                <em>Herkesin bildiği klasik veresiye mantığı, ama dijital ve kaybolmayan hali.</em>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-black text-white text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-3 text-warning">A'dan Z'ye Her Şey Dahil</h2>
+            <p class="text-white-50 mb-4">Finans, stok, veresiye, sadakat ve masa yönetimi. İşletmenizin eksiksiz çözümü.</p>
+            <a href="index.html#iletisim" class="btn btn-warning btn-lg px-5 fw-bold rounded-pill">Platinum Paketi Seç (3.000 TL)</a>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white py-4 text-center">
+        <div class="container">
+            <p class="mb-0 text-white-50 small">&copy; 2024 Esnaf Pro Yazılım Sistemleri.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>
