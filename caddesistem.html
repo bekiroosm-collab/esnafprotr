@@ -86,6 +86,11 @@
                     <a href="#" onclick="sayfaDegistir('dashboard')" class="nav-item bg-slate-800 text-white group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors"><i class="fa-solid fa-chart-pie w-6 text-center text-blue-400"></i> <span class="ml-3">Özet Rapor</span></a>
                     <a href="#" onclick="sayfaDegistir('pos')" class="nav-item text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors"><i class="fa-solid fa-cash-register w-6 text-center text-green-400"></i> <span class="ml-3">Sipariş & Kasa</span></a>
                     <a href="#" onclick="sayfaDegistir('customer')" class="nav-item text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors"><i class="fa-solid fa-users w-6 text-center text-indigo-400"></i> <span class="ml-3">Müşteriler</span></a>
+                    <a href="#" onclick="sayfaDegistir('uyuyanlar')" class="nav-item text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors relative">
+                    <i class="fa-solid fa-bell w-6 text-center text-red-400"></i>
+                    <span class="ml-3 hidden md:block">Uyuyan Müşteriler</span>
+                    <span id="uyuyanBadge" class="absolute right-2 top-3 bg-red-500 text-white text-[10px] px-1.5 rounded-full hidden">0</span>
+                </a>
                     <a href="#" onclick="sayfaDegistir('marketing')" class="nav-item text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors"><i class="fa-solid fa-bullhorn w-6 text-center text-pink-400"></i> <span class="ml-3">Duyuru & Kampanya</span></a>
                     <a href="#" onclick="sayfaDegistir('finance')" class="nav-item text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors"><i class="fa-solid fa-wallet w-6 text-center text-emerald-400"></i> <span class="ml-3">Finans & Gider</span></a>
                     <a href="#" onclick="sayfaDegistir('veresiye')" class="nav-item text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors"><i class="fa-solid fa-book-open w-6 text-center text-rose-400"></i> <span class="ml-3">Veresiye Defteri</span></a>
@@ -179,6 +184,25 @@
                         <div class="overflow-x-auto"><table class="w-full text-left text-sm text-slate-600"><thead class="bg-slate-50 text-xs uppercase"><tr><th class="px-4 py-3">İsim</th><th class="px-4 py-3">Tel</th><th class="px-4 py-3">Puan</th><th class="px-4 py-3 text-right">İşlem</th></tr></thead><tbody id="transactionTable" class="divide-y divide-slate-100"></tbody></table></div>
                     </div>
                 </div>
+
+<div id="page-uyuyanlar" class="hidden space-y-6">
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation text-red-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-red-700">
+                                Bu liste, son 30 gün içinde işletmenize uğramamış müşterileri gösterir. <br>
+                                <b>Tek tuşla</b> onlara özel kampanya mesajı gönderip geri kazanabilirsiniz.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6" id="sleepyGrid"></div>
+                </div>
+            </div>
 
                 <div id="page-marketing" class="hidden h-full fade-in">
                     <div class="flex flex-col lg:flex-row gap-6 h-full">
@@ -356,6 +380,7 @@
                 if(id === 'delivery') renderDeliveries();
                 if(id === 'veresiye') renderVeresiye();
                 if(id === 'marketing') renderMarketingList();
+                if(id === 'uyuyanlar') renderUyuyanlar();
             }
 
             // --- YAPILANDIRMA ---
@@ -385,7 +410,7 @@
             // --- GİRİŞ SİSTEMİ ---
             function checkAutoLogin() { if (localStorage.getItem('esnafPro_auth') === 'true' || sessionStorage.getItem('esnafPro_auth') === 'true') { showApp(); } }
             function checkLogin() { const u = document.getElementById('loginUser').value; const p = document.getElementById('loginPass').value; const rem = document.getElementById('rememberMe').checked; if (u === ADMIN_USER && p === ADMIN_PASS) { if (rem) localStorage.setItem('esnafPro_auth', 'true'); else sessionStorage.setItem('esnafPro_auth', 'true'); showApp(); } else { document.getElementById('loginError').classList.remove('hidden'); } }
-            function showApp() { document.getElementById('login-container').classList.add('hidden'); document.getElementById('app-container').classList.remove('hidden'); loadSettings(); initTables(); renderDashboard(); checkAlerts(); setInterval(renderKitchen, 30000); }
+            function showApp() { document.getElementById('login-container').classList.add('hidden'); document.getElementById('app-container').classList.remove('hidden'); loadSettings(); initTables(); renderDashboard(); checkAlerts(); setInterval(renderKitchen, 30000); checkSleepyStatus(); }
             function doLogout() { localStorage.removeItem('esnafPro_auth'); sessionStorage.removeItem('esnafPro_auth'); location.reload(); }
 
             function getStorage(key) { return JSON.parse(localStorage.getItem(key)) || []; }
@@ -542,6 +567,98 @@
                 alert("Demo yüklendi! Dükkan canlandı. 🚀");
                 location.reload();
             }
+
+            // --- UYUYAN MÜŞTERİ SİSTEMİ ---
+
+/**
+ * Uyuyan müşterileri tespit eder: 
+ * Son ziyaretinden bu yana 30 günden fazla geçmiş olanlar.
+ */
+function renderUyuyanlar() {
+    const db = getStorage(DB_KEY);
+    const grid = document.getElementById('sleepyGrid');
+    const badge = document.getElementById('uyuyanBadge');
+    grid.innerHTML = '';
+    
+    const BUGUN = Date.now();
+    const OTUZ_GUN_MS = 30 * 24 * 60 * 60 * 1000; // 30 Günlük milisaniye
+
+    // Son ziyareti 30 günü geçmiş olanları filtrele
+    const uyuyanlar = db.filter(c => {
+        const sonZiyaret = c.lastVisit || 0;
+        return (BUGUN - sonZiyaret) > OTUZ_GUN_MS;
+    });
+
+    // Badge güncelleme
+    if (uyuyanlar.length > 0) {
+        badge.innerText = uyuyanlar.length;
+        badge.classList.remove('hidden');
+    } else {
+        badge.classList.add('hidden');
+    }
+
+    if (uyuyanlar.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-center p-10 text-slate-400 italic">Şu an uyuyan müşteriniz yok. Herkes aktif! 🚀</div>';
+        return;
+    }
+
+    uyuyanlar.forEach(c => {
+        const gecenGun = Math.floor((BUGUN - c.lastVisit) / (1000 * 60 * 60 * 24));
+        const dukkanIsmi = settings.businessName || "İşletmemiz";
+        
+        // Kişiye özel kampanya mesajı taslağı
+        const kampanyaMesaji = `Selam ${c.name}, sizi özledik! 🌯 ${gecenGun} gündür uğramadınız. Size özel bir kampanya hazırladık, en kısa sürede bekliyoruz!`;
+
+        grid.innerHTML += `
+            <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl shadow-sm hover:shadow-md transition">
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <h4 class="font-bold text-slate-800 dark:text-white">${c.name}</h4>
+                        <p class="text-xs text-slate-500">${c.tel}</p>
+                    </div>
+                    <span class="bg-red-100 text-red-600 text-[10px] px-2 py-1 rounded-full font-bold">
+                        ${gecenGun} Gündür Yok
+                    </span>
+                </div>
+                <div class="text-xs text-slate-400 mb-4">
+                    <i class="fa-solid fa-clock-rotate-left mr-1"></i> Son: ${new Date(c.lastVisit).toLocaleDateString('tr-TR')}
+                </div>
+                <button onclick="sendSleepyMessage('${c.tel}', '${encodeURIComponent(kampanyaMesaji)}')" 
+                    class="w-full bg-green-500 hover:bg-green-600 text-white text-sm py-2 rounded-lg font-bold flex items-center justify-center gap-2 transition">
+                    <i class="fa-brands fa-whatsapp"></i> Geri Kazan
+                </button>
+            </div>
+        `;
+    });
+}
+
+/**
+ * WhatsApp Mesajı Gönderme
+ */
+function sendSleepyMessage(tel, encodedMsg) {
+    let cleanTel = tel.replace(/\D/g, '');
+    if (cleanTel.startsWith('0')) cleanTel = cleanTel.substring(1);
+    window.open(`https://wa.me/90${cleanTel}?text=${encodedMsg}`, '_blank');
+}
+
+/**
+ * Mevcut sayfaDegistir fonksiyonunu güncellemek gerekebilir
+ * dashboard veya app ilk açıldığında badge'i güncellemek için:
+ */
+function checkSleepyStatus() {
+    const db = getStorage(DB_KEY);
+    const BUGUN = Date.now();
+    const OTUZ_GUN_MS = 30 * 24 * 60 * 60 * 1000;
+    const uyuyanlar = db.filter(c => (BUGUN - (c.lastVisit || 0)) > OTUZ_GUN_MS);
+    
+    const badge = document.getElementById('uyuyanBadge');
+    if (uyuyanlar.length > 0) {
+        badge.innerText = uyuyanlar.length;
+        badge.classList.remove('hidden');
+    } else {
+        badge.classList.add('hidden');
+    }
+}
         </script>
     </div>
 </body>
