@@ -352,339 +352,105 @@
         </div>
 
         <script type="module">
-            // --- MOBİL MENÜ KONTROL ---
-            function toggleMenu() {
-                const sidebar = document.getElementById('sidebar');
-                const overlay = document.getElementById('mobile-overlay');
-                if (sidebar.classList.contains('-translate-x-full')) {
-                    sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden');
-                } else {
-                    sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden');
-                }
-            }
-            function sayfaDegistir(id) {
-                document.querySelectorAll('main > div').forEach(e => e.classList.add('hidden'));
-                const target = document.getElementById(`page-${id}`);
-                if(target) target.classList.remove('hidden');
-                document.querySelectorAll('.nav-item').forEach(el => { el.classList.remove('bg-slate-800', 'text-white'); el.classList.add('text-slate-300'); });
-                const activeLinks = document.querySelectorAll(`.nav-item`);
-                activeLinks.forEach(link => { if(link.getAttribute('onclick').includes(id)) { link.classList.add('bg-slate-800', 'text-white'); link.classList.remove('text-slate-300'); }});
-                if(window.innerWidth < 1024) { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('mobile-overlay').classList.add('hidden'); }
-                if(id === 'dashboard') renderDashboard();
-                if(id === 'pos') { renderTables(); }
-                if(id === 'customer') { renderCustomerTable(); }
-                if(id === 'finance') renderFinanceDashboard();
-                if(id === 'kitchen') renderKitchen();
-                if(id === 'stock') { renderStock(); renderSuppliers(); }
-                if(id === 'notes') renderNotes();
-                if(id === 'delivery') renderDeliveries();
-                if(id === 'veresiye') renderVeresiye();
-                if(id === 'marketing') renderMarketingList();
-                if(id === 'uyuyanlar') renderUyuyanlar();
-            }
 
-            // --- YAPILANDIRMA ---
-            const ADMIN_USER = "5437485476";
-            const ADMIN_PASS = "N_rlozk1234";
+// 🔥 GLOBAL FIX
+window.toggleMenu = toggleMenu;
+window.sayfaDegistir = sayfaDegistir;
 
-            const DB_KEY = 'esnaf_pro_cust_v19';
-            const SALES_KEY = 'esnaf_pro_sales_v19';
-            const PROD_KEY = 'esnaf_pro_prod_v19';
-            const TABLES_KEY = 'esnaf_pro_tables_v19';
-            const EXP_KEY = 'esnaf_pro_exp_v19';
-            const STOCK_KEY = 'esnaf_pro_stk_v19';
-            const NOTES_KEY = 'esnaf_pro_notes_v19';
-            const DEL_KEY = 'esnaf_pro_del_v19';
-            const SUPP_KEY = 'esnaf_pro_supp_v19';
-            const VERESIYE_KEY = 'esnaf_pro_ver_v19';
-            const SETTINGS_KEY = 'esnaf_pro_set_v19';
-            
-            let settings = { businessName: "Cadde Hot Dog", pointLimit: 100, reward: "Sürpriz Hediye" };
-            let activeTables = []; let activeTableId = null; let activeDeliveryId = null;
-
-            document.addEventListener('DOMContentLoaded', () => {
-                
-                checkAutoLogin();
-                if(localStorage.getItem('darkMode') === 'true') document.documentElement.classList.add('dark');
-            });
-
-            // --- GİRİŞ SİSTEMİ ---
-            function checkAutoLogin() { if (localStorage.getItem('esnafPro_auth') === 'true' || sessionStorage.getItem('esnafPro_auth') === 'true') { showApp(); } }
-            function checkLogin() { const u = document.getElementById('loginUser').value; const p = document.getElementById('loginPass').value; const rem = document.getElementById('rememberMe').checked; if (u === ADMIN_USER && p === ADMIN_PASS) { if (rem) localStorage.setItem('esnafPro_auth', 'true'); else sessionStorage.setItem('esnafPro_auth', 'true'); showApp(); } else { document.getElementById('loginError').classList.remove('hidden'); } }
-            async function showApp() {
-    document.getElementById('login-container').classList.add('hidden');
-    document.getElementById('app-container').classList.remove('hidden');
-
-    try {
-        await syncAllFromCloud();
-    } catch (e) {
-        console.log("Firebase hata verdi ama sistem devam ediyor", e);
+// --- MOBİL MENÜ ---
+function toggleMenu() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobile-overlay');
+    if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+    } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
     }
-
-    loadSettings();
-    initTables();
-    renderDashboard();
-    checkAlerts();
-    setInterval(renderKitchen, 30000);
-    checkSleepyStatus();
 }
-            function doLogout() { localStorage.removeItem('esnafPro_auth'); sessionStorage.removeItem('esnafPro_auth'); location.reload(); }
 
-            function getStorage(key) { return JSON.parse(localStorage.getItem(key)) || []; }
-            function setStorage(key, data) {
-    localStorage.setItem(key, JSON.stringify(data));
-    syncToFirebase(key); // 🔥 FIREBASE'E GÖNDER
-}
-            function toggleDarkMode() { document.documentElement.classList.toggle('dark'); localStorage.setItem('darkMode', document.documentElement.classList.contains('dark')); }
+// 🔥 EN KRİTİK FIX BURASI
+function sayfaDegistir(id) {
 
-            // --- EXCEL CIKTISI ---
-            function exportFinanceToExcel() {
-                const sales = getStorage(SALES_KEY);
-                const expenses = getStorage(EXP_KEY);
-                let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-                
-                let dailyStats = {};
-                sales.forEach(s => { let dateKey = new Date(s.date).toLocaleDateString(); if(!dailyStats[dateKey]) dailyStats[dateKey] = {income:0, expense:0}; dailyStats[dateKey].income += s.total; });
-                expenses.forEach(e => { let dateKey = new Date(e.date).toLocaleDateString(); if(!dailyStats[dateKey]) dailyStats[dateKey] = {income:0, expense:0}; dailyStats[dateKey].expense += e.amount; });
+    document.querySelectorAll('main > div').forEach(e => e.classList.add('hidden'));
 
-                csvContent += "GUNLUK OZET RAPORU\n";
-                csvContent += "Tarih;Toplam Gelir;Toplam Gider;Net Kar\n";
-                Object.keys(dailyStats).sort().reverse().forEach(date => { let d = dailyStats[date]; let net = d.income - d.expense; csvContent += `${date};${d.income};${d.expense};${net}\n`; });
-                csvContent += "\n\n"; 
+    const target = document.getElementById(`page-${id}`);
+    if(target) target.classList.remove('hidden');
 
-                csvContent += "GIDER LISTESI (Harcamalar)\n";
-                csvContent += "Tarih;Aciklama;Tutar (TL)\n";
-                expenses.forEach(e => { let date = new Date(e.date).toLocaleDateString(); let desc = e.desc.replace(/;/g, " "); csvContent += `${date};${desc};-${e.amount}\n`; });
-                csvContent += "\n\n";
-
-                csvContent += "GELIR LISTESI (Satislar)\n";
-                csvContent += "Tarih;Aciklama;Tutar (TL)\n";
-                sales.forEach(s => { let date = new Date(s.date).toLocaleDateString(); let desc = s.tableName.replace(/;/g, " "); csvContent += `${date};${desc};${s.total}\n`; });
-
-                const encodedUri = encodeURI(csvContent);
-                const link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", "EsnafPro_Detayli_Finans_Raporu_" + new Date().toLocaleDateString() + ".csv");
-                document.body.appendChild(link); link.click(); document.body.removeChild(link);
-            }
-
-            function renderFinanceDashboard() { 
-                const sales = getStorage(SALES_KEY); const exps = getStorage(EXP_KEY); 
-                let inc=0, exp=0; let todayInc=0, todayExp=0; 
-                const todayStart = new Date().setHours(0,0,0,0);
-                sales.forEach(s => { inc += s.total; if(s.date >= todayStart) todayInc += s.total; }); 
-                exps.forEach(e => { exp += e.amount; if(e.date >= todayStart) todayExp += e.amount; }); 
-                
-                document.getElementById('finTodayIncome').innerText = todayInc.toFixed(2) + " ₺";
-                document.getElementById('finTodayExpense').innerText = todayExp.toFixed(2) + " ₺";
-                document.getElementById('finTotalIncome').innerText = inc.toFixed(2) + " ₺"; 
-                document.getElementById('finTotalExpense').innerText = exp.toFixed(2) + " ₺"; 
-                document.getElementById('finNetProfit').innerText = (inc - exp).toFixed(2) + " ₺"; 
-                
-                const elist = document.getElementById('expenseList'); elist.innerHTML = ''; 
-                exps.slice(-5).reverse().forEach(e => { let dateStr = new Date(e.date).toLocaleDateString('tr-TR'); elist.innerHTML += `<div class="flex justify-between items-center border-b pb-2 mb-2 dark:border-slate-700"><div class="flex flex-col"><span class="text-sm font-bold text-slate-700 dark:text-slate-200">${e.desc}</span><span class="text-xs text-slate-400"><i class="fa-regular fa-clock mr-1"></i>${dateStr}</span></div><span class="text-red-600 font-bold">-${e.amount} ₺</span></div>`; }); 
-            }
-
-            function islemYap() {
-                const telInput = document.getElementById('mainInput'); const nameInput = document.getElementById('mainName');
-                let tel = telInput.value.replace(/\D/g, ''); let name = nameInput.value.trim();
-                if (tel.length < 10) { alert("Lütfen 10 haneli numara girin."); return; }
-                if (tel.startsWith('0')) tel = tel.substring(1);
-                let db = getStorage(DB_KEY); let customer = db.find(c => c.tel === tel); let puan = 0; let message = "";
-                let dukkanIsmi = settings.businessName || "İşletmemiz";
-                let odulAdi = settings.reward || "Sürpriz Hediye";
-
-                if (customer) { 
-                    if(name) customer.name = name; 
-                    customer.points += 10; customer.visits += 1; customer.lastVisit = Date.now(); puan = customer.points; 
-                    message = `Sayın ${customer.name || 'Müşterimiz'}, ${dukkanIsmi} olarak bizi tercih ettiğiniz için teşekkürler! Puanınız: ${puan}.`; 
-                    if(puan >= settings.pointLimit) message = `Tebrikler Sayın ${customer.name || 'Müşterimiz'}! ${dukkanIsmi} üyeliğinizde ${puan} puana ulaştınız. 🎁 **${odulAdi}** kazandınız! Dükkanımıza bekleriz <3`; 
-                } else { 
-                    customer = { id: Date.now(), tel: tel, name: name || "Değerli Müşterimiz", points: 10, visits: 1, firstVisit: Date.now(), lastVisit: Date.now() }; db.push(customer); 
-                    message = `Hoş geldiniz! ${dukkanIsmi} puan sistemine kaydınız yapıldı. İlk 10 puanınız yüklendi! 100 Puanda hediyelerimiz mevcuttur. İyi günler dileriz.`; 
-                }
-                setStorage(DB_KEY, db); telInput.value = ''; nameInput.value = ''; renderCustomerTable();
-                if(confirm("Puan kaydedildi! WhatsApp mesajı gönderilsin mi?")) { window.open(`https://wa.me/90${tel}?text=${encodeURIComponent(message)}`, '_blank'); }
-            }
-
-            function resetPoints(tel) {
-                if(confirm("Bu müşterinin puanı sıfırlansın mı? (Ödül verildiğinde kullanılır)")) {
-                    let db = getStorage(DB_KEY);
-                    let c = db.find(x => x.tel === tel);
-                    if(c) { c.points = 0; setStorage(DB_KEY, db); renderCustomerTable(); alert("Puan sıfırlandı."); }
-                }
-            }
-
-            function renderCustomerTable() { 
-                const db = getStorage(DB_KEY); const table = document.getElementById('transactionTable'); const search = document.getElementById('customerSearch').value.toLowerCase(); table.innerHTML = ''; 
-                const filtered = db.filter(c => (c.name && c.name.toLowerCase().includes(search)) || (c.tel && c.tel.includes(search))); 
-                filtered.reverse().forEach((c) => { 
-                    table.innerHTML += `<tr class='border-b hover:bg-slate-50 transition'><td class='px-4 py-3 font-medium text-slate-700'>${c.name}</td><td class='px-4 py-3 text-slate-500 font-mono'>${c.tel}</td><td class='px-4 py-3 font-bold text-indigo-600'>${c.points}</td><td class='px-4 py-3 text-right'><button onclick="resetPoints('${c.tel}')" class="text-orange-500 hover:text-orange-700 px-2"><i class="fa-solid fa-arrows-rotate"></i></button><button onclick="delCust('${c.tel}')" class="text-red-400 hover:text-red-600 px-2"><i class="fa-solid fa-trash"></i></button></td></tr>`; 
-                }); 
-            }
-
-            function renderMarketingList() { const db = getStorage(DB_KEY); const list = document.getElementById('marketingCustomerList'); const search = document.getElementById('marketingSearch').value.toLowerCase(); list.innerHTML = ''; const filtered = db.filter(c => (c.name && c.name.toLowerCase().includes(search)) || (c.tel && c.tel.includes(search))); if(filtered.length === 0) { list.innerHTML = '<div class="text-center text-xs text-slate-400 mt-4">Müşteri yok.</div>'; return; } filtered.forEach(c => { list.innerHTML += `<div onclick="selectMarketingTarget('${c.tel}', '${c.name}')" class="p-3 border rounded-lg cursor-pointer hover:bg-indigo-50 bg-white"><div class="font-bold text-sm text-slate-700">${c.name}</div><div class="text-xs text-slate-400">${c.tel}</div></div>`; }); }
-            function selectMarketingTarget(tel, name) { document.getElementById('targetCustomerDisplay').value = `${name} (${tel})`; }
-            function sendAnnouncement() { const inputVal = document.getElementById('targetCustomerDisplay').value; const msg = document.getElementById('marketingMsgArea').value; if(!inputVal || !msg) { alert("Eksik bilgi."); return; } let tel = ""; const match = inputVal.match(/\((\d+)\)/); if (match) tel = match[1]; else tel = inputVal.replace(/\D/g, ''); if(tel.length < 10) { alert("Geçersiz numara."); return; } if(tel.startsWith('0')) tel = tel.substring(1); window.open(`https://wa.me/90${tel}?text=${encodeURIComponent(msg)}`, '_blank'); }
-            function renderSettingsLists(){ const pl=document.getElementById('settingsProductList'); pl.innerHTML=''; getStorage(PROD_KEY).forEach(p=>{ pl.innerHTML+=`<div class='flex justify-between border-b dark:border-slate-600 p-1 text-sm'><span>${p.name}</span><span>${p.price}₺</span></div>`}); const tl=document.getElementById('settingsTableList'); tl.innerHTML=''; getStorage(TABLES_KEY).forEach((t, idx)=>{ tl.innerHTML+=`<div class='flex justify-between border-b dark:border-slate-600 p-1 text-sm'><span>${t.name}</span><button onclick="delTable(${idx})" class="text-red-500 text-xs">Sil</button></div>` }); }
-            function addTable() { const n = document.getElementById('newTableName').value; if(n) { const t = getStorage(TABLES_KEY); t.push({id: Date.now(), name: n, items: [], total: 0}); setStorage(TABLES_KEY, t); document.getElementById('newTableName').value = ''; renderSettingsLists(); initTables(); } }
-            function delTable(idx) { if(confirm("Silinsin mi?")) { const t = getStorage(TABLES_KEY); if(t[idx].total > 0) { alert("Masa dolu."); return; } t.splice(idx, 1); setStorage(TABLES_KEY, t); renderSettingsLists(); initTables(); } }
-            function exportData() { const data = { customers: getStorage(DB_KEY), sales: getStorage(SALES_KEY), products: getStorage(PROD_KEY), tables: getStorage(TABLES_KEY), expenses: getStorage(EXP_KEY), stock: getStorage(STOCK_KEY), veresiye: getStorage(VERESIYE_KEY), settings: settings }; const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data)); const a = document.createElement('a'); a.href = dataStr; a.download = "esnafpro_yedek.json"; document.body.appendChild(a); a.click(); a.remove(); }
-            function importDataTrigger() { document.getElementById('importFile').click(); }
-            function importData(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const data = JSON.parse(e.target.result); if(data.customers) setStorage(DB_KEY, data.customers); if(data.sales) setStorage(SALES_KEY, data.sales); if(data.products) setStorage(PROD_KEY, data.products); if(data.tables) setStorage(TABLES_KEY, data.tables); if(data.expenses) setStorage(EXP_KEY, data.expenses); if(data.stock) setStorage(STOCK_KEY, data.stock); if(data.veresiye) setStorage(VERESIYE_KEY, data.veresiye); if(data.settings) localStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings)); alert("Yüklendi!"); location.reload(); } catch(err) { alert("Hata."); } }; reader.readAsText(file); }
-            function renderDashboard() { const sales = getStorage(SALES_KEY); const customers = getStorage(DB_KEY); const todayStart = new Date().setHours(0,0,0,0); let dTotal=0, delCount=0; sales.forEach(s => { if(s.date >= todayStart) { dTotal += s.total; if(s.type === 'Paket') delCount++; } }); let activeTbl = getStorage(TABLES_KEY).filter(t => t.total > 0).length; document.getElementById('statDailyRevenue').innerText = dTotal.toFixed(2) + " ₺"; document.getElementById('statDeliveryCount').innerText = delCount; document.getElementById('statActiveTables').innerText = activeTbl; document.getElementById('statTotalCustomers').innerText = customers.length; const tbl = document.getElementById('dashboardSalesTable'); tbl.innerHTML = ''; sales.slice(-5).reverse().forEach(s => { tbl.innerHTML += `<tr class='border-b hover:bg-slate-50 dark:hover:bg-slate-800'><td class='px-4 py-2 text-xs'>${new Date(s.date).toLocaleTimeString()}</td><td class='px-4 py-2 text-xs'>${s.type || 'Masa'}</td><td class='px-4 py-2 font-bold text-slate-700 dark:text-slate-300'>${s.total}₺</td></tr>`; }); const notes = getStorage(NOTES_KEY); const noteBox = document.getElementById('dashNotes'); noteBox.innerHTML = ''; if(notes.length > 0) { notes.slice(0,3).forEach(n => noteBox.innerHTML += `<div class="bg-yellow-50 border border-yellow-200 p-2 rounded text-xs text-yellow-800">${n.text}</div>`); } else noteBox.innerHTML = '<p class="text-xs text-slate-400 italic">Henüz not yok.</p>'; }
-            function initTables() { activeTables = getStorage(TABLES_KEY); if(activeTables.length === 0) { for(let i=1; i<=6; i++) activeTables.push({ id: Date.now()+i, name: `Masa ${i}`, items: [], total: 0 }); setStorage(TABLES_KEY, activeTables); } renderTables(); }
-            function renderTables() { const grid = document.getElementById('tablesGrid'); grid.innerHTML = ''; activeTables.forEach(t => { const filled = t.items.length > 0; grid.innerHTML += `<button onclick="selectTable(${t.id})" class="${filled?'bg-red-50 border-red-200 dark:bg-red-900 dark:border-red-700':'bg-emerald-50 border-emerald-200 dark:bg-emerald-900 dark:border-emerald-700'} border rounded-xl p-3 flex flex-col items-center justify-center h-20 shadow-sm relative transition active:scale-95 ${activeTableId===t.id?'ring-2 ring-indigo-500':''}"> <span class="font-bold text-slate-700 dark:text-white text-sm">${t.name}</span>${filled?`<span class="text-xs font-bold text-red-600 bg-white px-2 py-1 rounded mt-1 shadow-sm">${t.total} ₺</span>`:''} </button>`; }); }
-            function selectTable(id) { activeTableId = id; activeDeliveryId = null; renderTables(); const table = activeTables.find(t=>t.id===id); document.getElementById('selectedTableName').innerText = table.name; document.getElementById('productSection').classList.remove('opacity-50','pointer-events-none'); document.getElementById('orderSection').classList.remove('opacity-50','pointer-events-none'); renderProducts(); renderCurrentOrder(); }
-            function renderProducts() { const list = getStorage(PROD_KEY); const grid = document.getElementById('productsGrid'); grid.innerHTML = ''; const filter = document.getElementById('searchProduct').value.toLowerCase(); list.filter(p=>p.name.toLowerCase().includes(filter)).forEach(p=>{ grid.innerHTML += `<div onclick="addToOrder(${p.id},'${p.name}',${p.price})" class="cursor-pointer bg-white dark:bg-slate-700 border dark:border-slate-600 hover:bg-indigo-50 dark:hover:bg-slate-600 p-2 rounded shadow-sm h-16 flex flex-col justify-center"><span class="text-xs font-bold leading-tight dark:text-white">${p.name}</span><span class="text-green-600 dark:text-green-400 text-xs font-bold">${p.price} ₺</span></div>`; }); }
-            function filterProducts() { renderProducts(); }
-            function addToOrder(id, name, price) { if(!activeTableId) return; const table = activeTables.find(t=>t.id===activeTableId); const ex = table.items.find(i=>i.id===id); if(ex) ex.qty++; else table.items.push({id,name,price,qty:1}); table.total = table.items.reduce((a,b)=>a+(b.price*b.qty),0); renderCurrentOrder(); renderTables(); }
-            function renderCurrentOrder() { const table = activeTables.find(t=>t.id===activeTableId); const list = document.getElementById('currentOrderList'); list.innerHTML = ''; table.items.forEach((i,idx)=>{ list.innerHTML += `<li class="flex justify-between text-sm border-b pb-1 dark:border-slate-700 dark:text-slate-300"><span>${i.qty}x ${i.name}</span><button onclick="remItem(${idx})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button></li>`; }); document.getElementById('orderTotal').innerText = table.total.toFixed(2) + " ₺"; }
-            function remItem(idx) { const table = activeTables.find(t=>t.id===activeTableId); table.items.splice(idx,1); table.total = table.items.reduce((a,b)=>a+(b.price*b.qty),0); renderCurrentOrder(); renderTables(); }
-            function clearCurrentOrder() { if(confirm("Temizle?")) { const t=activeTables.find(x=>x.id===activeTableId); t.items=[]; t.total=0; renderCurrentOrder(); renderTables(); } }
-            function completePayment(method) { const table = activeTables.find(t=>t.id===activeTableId); if(table.total===0) return; const sale = { id:Date.now(), date:Date.now(), tableName:table.name, items:[...table.items], total:table.total, paymentMethod:method, type: 'Masa' }; const sales = getStorage(SALES_KEY); sales.push(sale); setStorage(SALES_KEY, sales); table.items=[]; table.total=0; renderCurrentOrder(); renderTables(); alert("Ödeme Alındı!"); }
-            function sendToKitchen() { alert("Mutfak ekranına gönderildi."); renderKitchen(); }
-            function delCust(tel) { if(confirm("Silinsin mi?")) { let db=getStorage(DB_KEY); db=db.filter(c=>c.tel!==tel); setStorage(DB_KEY,db); renderCustomerTable(); } }
-            function createNewDelivery() { const name = prompt("Müşteri Adı:"); const addr = prompt("Adres:"); if(name && addr) { const dels = getStorage(DEL_KEY); const newDel = { id:Date.now(), customerName:name, address:addr, items:[], total:0, status: 'Hazırlanıyor', courier: '' }; dels.push(newDel); setStorage(DEL_KEY, dels); renderDeliveries(); selectDelivery(newDel.id); } }
-            function selectDelivery(id) { activeDeliveryId = id; activeTableId = null; const dels = getStorage(DEL_KEY); const d = dels.find(x => x.id === id); document.getElementById('deliveryDetailPanel').classList.remove('hidden'); document.getElementById('delDetName').innerText = d.customerName; document.getElementById('delDetAddress').innerText = d.address; document.getElementById('delDetStatus').innerText = d.status; document.getElementById('delDetTotal').innerText = d.total + " ₺"; const ul = document.getElementById('delDetItems'); ul.innerHTML = ''; if(d.items.length===0) ul.innerHTML = '<li class="text-slate-400 italic">Ürün eklemek için POS ekranını kullanın (Demo)</li>'; else d.items.forEach(i => ul.innerHTML += `<li>${i.qty}x ${i.name}</li>`); const sel = document.getElementById('delCourierSelect'); sel.innerHTML = '<option value="">Seç</option><option value="Ahmet">Ahmet</option><option value="Mehmet">Mehmet</option>'; sel.value = d.courier; renderDeliveries(); }
-            function assignCourier() { if(!activeDeliveryId) return; const c = document.getElementById('delCourierSelect').value; const dels = getStorage(DEL_KEY); const d = dels.find(x => x.id === activeDeliveryId); d.courier = c; d.status = 'Yolda'; setStorage(DEL_KEY, dels); renderDeliveries(); selectDelivery(d.id); }
-            function completeDelivery() { if(!activeDeliveryId) return; if(!confirm("Teslim edildi ve ücret alındı mı?")) return; const dels = getStorage(DEL_KEY); const idx = dels.findIndex(x => x.id === activeDeliveryId); const d = dels[idx]; const sales = getStorage(SALES_KEY); sales.push({ id:Date.now(), date:Date.now(), tableName:'Paket: '+d.customerName, items:d.items, total:d.total, paymentMethod:'Nakit', type: 'Paket' }); setStorage(SALES_KEY, sales); dels.splice(idx, 1); setStorage(DEL_KEY, dels); document.getElementById('deliveryDetailPanel').classList.add('hidden'); activeDeliveryId = null; renderDeliveries(); }
-            function addVeresiyeRecord() { const n=document.getElementById('verName').value, a=parseFloat(document.getElementById('verAmount').value), no=document.getElementById('verNote').value; if(n && a) { const list = getStorage(VERESIYE_KEY); list.push({date:Date.now(), name:n, amount:a, note:no}); setStorage(VERESIYE_KEY, list); document.getElementById('verName').value=''; document.getElementById('verAmount').value=''; renderVeresiye(); } }
-            function payVeresiye(idx) { if(confirm("Borç silinsin mi?")) { const list = getStorage(VERESIYE_KEY); list.splice(idx,1); setStorage(VERESIYE_KEY, list); renderVeresiye(); } }
-            function addVeresiye() { const table = activeTables.find(t=>t.id===activeTableId); if(table.total === 0) return; const name = prompt("Müşteri Adı:"); if(name) { const list = getStorage(VERESIYE_KEY); list.push({date:Date.now(), name:name, amount:table.total, note:"Masa Hesabı"}); setStorage(VERESIYE_KEY, list); table.items=[]; table.total=0; renderCurrentOrder(); renderTables(); renderVeresiye(); alert("Veresiye defterine işlendi."); } }
-            function renderSuppliers() { const s = getStorage(SUPP_KEY); const el = document.getElementById('supplierList'); el.innerHTML = ''; s.forEach((item, idx) => { el.innerHTML += `<div class="flex justify-between text-sm border-b p-1 dark:text-slate-300 dark:border-slate-700"><span>${item.name} (${item.tel})</span><button onclick="delSupp(${idx})" class="text-red-400"><i class="fa-solid fa-trash"></i></button></div>`; }); }
-            function addSupplier() { const n=document.getElementById('suppName').value, t=document.getElementById('suppTel').value; if(n) { const s=getStorage(SUPP_KEY); s.push({name:n, tel:t}); setStorage(SUPP_KEY,s); renderSuppliers(); } }
-            function delSupp(idx) { const s=getStorage(SUPP_KEY); s.splice(idx,1); setStorage(SUPP_KEY,s); renderSuppliers(); }
-            function openStockModal() { document.getElementById('stockModal').classList.remove('hidden'); }
-            function saveStockItem() { const name = document.getElementById('stkName').value; const qty = parseFloat(document.getElementById('stkQty').value); const unit = document.getElementById('stkUnit').value; const crit = parseFloat(document.getElementById('stkCrit').value); if(name && !isNaN(qty)) { const s = getStorage(STOCK_KEY); s.push({id:Date.now(), name, qty, unit, crit}); setStorage(STOCK_KEY, s); document.getElementById('stockModal').classList.add('hidden'); renderStock(); } }
-            function renderStock() { const s = getStorage(STOCK_KEY); const tbl = document.getElementById('stockTable'); tbl.innerHTML = ''; s.forEach((item, idx) => { const isCrit = item.qty <= item.crit; tbl.innerHTML += `<tr class="border-b dark:border-slate-700 dark:text-slate-300 ${isCrit ? 'bg-red-50 dark:bg-red-900/20' : ''}"><td class="px-2 py-2 font-bold">${item.name}</td><td class="px-2 py-2 ${isCrit ? 'text-red-600 font-bold' : ''}">${item.qty}</td><td class="px-2 py-2 text-right"><button onclick="updateStock(${idx}, 1)" class="text-green-500 px-1">+</button><button onclick="updateStock(${idx}, -1)" class="text-red-500 px-1">-</button></td></tr>`; }); checkAlerts(); }
-            function updateStock(idx, val) { const s=getStorage(STOCK_KEY); s[idx].qty += val; setStorage(STOCK_KEY, s); renderStock(); }
-            function checkAlerts() { const s = getStorage(STOCK_KEY); const crit = s.some(i => i.qty <= i.crit); if(crit) document.getElementById('stockAlert').classList.remove('hidden'); else document.getElementById('stockAlert').classList.add('hidden'); }
-            function renderKitchen() { const grid = document.getElementById('kitchenGrid'); grid.innerHTML = ''; const tables = getStorage(TABLES_KEY).filter(t => t.items.length > 0); if(tables.length === 0) { grid.innerHTML = `<div class="col-span-full text-center text-slate-400 mt-10">Sipariş yok.</div>`; return; } tables.forEach(t => { let itemsHtml = t.items.map(i => `<div class="flex justify-between border-b dark:border-slate-600 py-1"><span>${i.qty}x ${i.name}</span></div>`).join(''); grid.innerHTML += `<div class="bg-white dark:bg-slate-800 border-l-4 border-l-orange-500 rounded-lg shadow-md p-4"><div class="font-bold text-lg dark:text-white mb-2">${t.name}</div><div class="text-sm dark:text-slate-300 mb-4">${itemsHtml}</div><button class="w-full bg-green-500 text-white py-1 rounded">Hazır</button></div>`; }); }
-            function renderNotes() { const notes = getStorage(NOTES_KEY); const grid = document.getElementById('notesGrid'); grid.innerHTML = ''; const colors = ['bg-yellow-100 text-yellow-800', 'bg-blue-100 text-blue-800', 'bg-pink-100 text-pink-800', 'bg-green-100 text-green-800']; notes.forEach((n, idx) => { const color = colors[idx % colors.length]; grid.innerHTML += `<div class="${color} p-4 rounded shadow-md relative transform hover:-rotate-1 transition duration-300 h-40 flex flex-col"><div class="flex-1 font-handwriting text-lg leading-tight overflow-y-auto">${n.text}</div><div class="text-right mt-2"><button onclick="delNote(${idx})" class="text-xs font-bold opacity-50 hover:opacity-100"><i class="fa-solid fa-trash"></i> Yırt At</button></div></div>`; }); }
-            function addNote() { const t = prompt("Notunuz:"); if(t) { const n=getStorage(NOTES_KEY); n.unshift({text:t, date:Date.now()}); setStorage(NOTES_KEY,n); renderNotes(); } }
-            function delNote(idx) { const n=getStorage(NOTES_KEY); n.splice(idx,1); setStorage(NOTES_KEY,n); renderNotes(); }
-            function addExpense() { const d=document.getElementById('expenseDesc').value, a=parseFloat(document.getElementById('expenseAmount').value); if(d && a) { const e=getStorage(EXP_KEY); e.push({desc:d, amount:a, date:Date.now()}); setStorage(EXP_KEY,e); renderFinanceDashboard(); } }
-            function closeSettings(){document.getElementById('settingsModal').classList.add('hidden');}
-            function openSettings(){document.getElementById('settingsModal').classList.remove('hidden'); renderSettingsLists();}
-            function loadSettings(){ const s=localStorage.getItem(SETTINGS_KEY); if(s) settings=JSON.parse(s); document.getElementById('displayBusinessName').innerText=settings.businessName; document.getElementById('displayBusinessNameDesk').innerText=settings.businessName; document.getElementById('settingName').value=settings.businessName; document.getElementById('settingLimit').value=settings.pointLimit; document.getElementById('settingReward').value=settings.reward || ""; }
-            function saveSettings(){ settings.businessName=document.getElementById('settingName').value; settings.pointLimit=document.getElementById('settingLimit').value; settings.reward=document.getElementById('settingReward').value; localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings)); closeSettings(); loadSettings(); }
-            function addProduct(){ const n=document.getElementById('newProdName').value, p=document.getElementById('newProdPrice').value; if(n&&p){ const l=getStorage(PROD_KEY); l.push({id:Date.now(),name:n,price:parseFloat(p)}); setStorage(PROD_KEY,l); renderSettingsLists(); } }
-            function clearAllData(){ if(confirm("Her şey silinecek?")) { localStorage.clear(); location.reload(); } }
-            function demoVerisiYukle() {
-                if(!confirm("Demo verisi yüklensin mi? Tüm mevcut veriler silinir.")) return;
-                localStorage.clear();
-                setStorage(PROD_KEY, [{id:1,name:"Sosisli Standart",price:120},{id:2,name:"Mega Burger",price:180},{id:3,name:"Ayran",price:20},{id:4,name:"Kola",price:40},{id:5,name:"Islak Hamburger",price:60}]);
-                setStorage(DB_KEY, [{tel:"5551112233", name:"Ali Sadık", points:120, birthday:"2000-01-01", lastVisit: Date.now()}, {tel:"5552223344", name:"Ayşe Gezgin", points:40, birthday:"1995-05-12", lastVisit: Date.now()-86400000}]);
-                const t = []; for(let i=1;i<=6;i++) t.push({id:i, name:`Masa ${i}`, items:[], total:0});
-                t[0].items = [{id:1,name:"Sosisli Standart",qty:2,price:120},{id:4,name:"Kola",qty:2,price:40}]; t[0].total = 320; 
-                setStorage(TABLES_KEY, t);
-                setStorage(DEL_KEY, [{id:101, customerName:"Mehmet Bey", address:"Çınar Apt. No:5", items:[{name:"Mega Burger",qty:1}], total:180, status:"Yolda", courier:"Ahmet"}]);
-                setStorage(VERESIYE_KEY, [{date:Date.now()-100000, name:"Komşu Berber", amount:250, note:"Öğle Yemeği"}]);
-                setStorage(STOCK_KEY, [{id:1, name:"Sosis", qty:5, unit:"Paket", crit:10}, {id:2, name:"Ekmek", qty:100, unit:"Adet", crit:20}]);
-                setStorage(SUPP_KEY, [{name:"Kasap İsmail", tel:"05321112233"}]);
-                setStorage(NOTES_KEY, [{text:"Toptancı yarın 10'da gelecek, parayı hazırla.", date:Date.now()}]);
-                alert("Demo yüklendi! Dükkan canlandı. 🚀");
-                location.reload();
-            }
-
-            // --- UYUYAN MÜŞTERİ SİSTEMİ ---
-
-/**
- * Uyuyan müşterileri tespit eder: 
- * Son ziyaretinden bu yana 30 günden fazla geçmiş olanlar.
- */
-function renderUyuyanlar() {
-    const db = getStorage(DB_KEY);
-    const grid = document.getElementById('sleepyGrid');
-    const badge = document.getElementById('uyuyanBadge');
-    grid.innerHTML = '';
-    
-    const BUGUN = Date.now();
-    const OTUZ_GUN_MS = 30 * 24 * 60 * 60 * 1000; // 30 Günlük milisaniye
-
-    // Son ziyareti 30 günü geçmiş olanları filtrele
-    const uyuyanlar = db.filter(c => {
-        const sonZiyaret = c.lastVisit || 0;
-        return (BUGUN - sonZiyaret) > OTUZ_GUN_MS;
+    document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('bg-slate-800','text-white');
+        el.classList.add('text-slate-300');
     });
 
-    // Badge güncelleme
-    if (uyuyanlar.length > 0) {
-        badge.innerText = uyuyanlar.length;
-        badge.classList.remove('hidden');
-    } else {
-        badge.classList.add('hidden');
-    }
-
-    if (uyuyanlar.length === 0) {
-        grid.innerHTML = '<div class="col-span-full text-center p-10 text-slate-400 italic">Şu an uyuyan müşteriniz yok. Herkes aktif! 🚀</div>';
-        return;
-    }
-
-    uyuyanlar.forEach(c => {
-        const gecenGun = Math.floor((BUGUN - c.lastVisit) / (1000 * 60 * 60 * 24));
-        const dukkanIsmi = settings.businessName || "İşletmemiz";
-        
-        // Kişiye özel kampanya mesajı taslağı
-        const kampanyaMesaji = `Selam ${c.name}, sizi özledik! 🌯 ${gecenGun} gündür uğramadınız. Size özel bir kampanya hazırladık, en kısa sürede bekliyoruz!`;
-
-        grid.innerHTML += `
-            <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl shadow-sm hover:shadow-md transition">
-                <div class="flex justify-between items-start mb-3">
-                    <div>
-                        <h4 class="font-bold text-slate-800 dark:text-white">${c.name}</h4>
-                        <p class="text-xs text-slate-500">${c.tel}</p>
-                    </div>
-                    <span class="bg-red-100 text-red-600 text-[10px] px-2 py-1 rounded-full font-bold">
-                        ${gecenGun} Gündür Yok
-                    </span>
-                </div>
-                <div class="text-xs text-slate-400 mb-4">
-                    <i class="fa-solid fa-clock-rotate-left mr-1"></i> Son: ${new Date(c.lastVisit).toLocaleDateString('tr-TR')}
-                </div>
-                <button onclick="sendSleepyMessage('${c.tel}', '${encodeURIComponent(kampanyaMesaji)}')" 
-                    class="w-full bg-green-500 hover:bg-green-600 text-white text-sm py-2 rounded-lg font-bold flex items-center justify-center gap-2 transition">
-                    <i class="fa-brands fa-whatsapp"></i> Geri Kazan
-                </button>
-            </div>
-        `;
+    document.querySelectorAll('.nav-item').forEach(link => {
+        const oc = link.getAttribute('onclick');
+        if(oc && oc.includes(id)){
+            link.classList.add('bg-slate-800','text-white');
+            link.classList.remove('text-slate-300');
+        }
     });
-}
 
-/**
- * WhatsApp Mesajı Gönderme
- */
-function sendSleepyMessage(tel, encodedMsg) {
-    let cleanTel = tel.replace(/\D/g, '');
-    if (cleanTel.startsWith('0')) cleanTel = cleanTel.substring(1);
-    window.open(`https://wa.me/90${cleanTel}?text=${encodedMsg}`, '_blank');
-}
-
-/**
- * Mevcut sayfaDegistir fonksiyonunu güncellemek gerekebilir
- * dashboard veya app ilk açıldığında badge'i güncellemek için:
- */
-function checkSleepyStatus() {
-    const db = getStorage(DB_KEY);
-    const BUGUN = Date.now();
-    const OTUZ_GUN_MS = 30 * 24 * 60 * 60 * 1000;
-    const uyuyanlar = db.filter(c => (BUGUN - (c.lastVisit || 0)) > OTUZ_GUN_MS);
-    
-    const badge = document.getElementById('uyuyanBadge');
-    if (uyuyanlar.length > 0) {
-        badge.innerText = uyuyanlar.length;
-        badge.classList.remove('hidden');
-    } else {
-        badge.classList.add('hidden');
+    if(window.innerWidth < 1024) {
+        document.getElementById('sidebar').classList.add('-translate-x-full');
+        document.getElementById('mobile-overlay').classList.add('hidden');
     }
 
+    if(id === 'dashboard') renderDashboard();
+    if(id === 'pos') renderTables();
+    if(id === 'customer') renderCustomerTable();
+    if(id === 'finance') renderFinanceDashboard();
+    if(id === 'kitchen') renderKitchen();
+    if(id === 'stock') { renderStock(); renderSuppliers(); }
+    if(id === 'notes') renderNotes();
+    if(id === 'delivery') renderDeliveries();
+    if(id === 'veresiye') renderVeresiye();
+    if(id === 'marketing') renderMarketingList();
+    if(id === 'uyuyanlar') renderUyuyanlar();
 }
+
+// 🔥 DİĞER TÜM FONKSİYONLARI GLOBAL YAP
+window.checkLogin = checkLogin;
+window.doLogout = doLogout;
+window.islemYap = islemYap;
+window.resetPoints = resetPoints;
+window.delCust = delCust;
+window.addTable = addTable;
+window.delTable = delTable;
+window.addProduct = addProduct;
+window.selectTable = selectTable;
+window.addToOrder = addToOrder;
+window.remItem = remItem;
+window.completePayment = completePayment;
+window.clearCurrentOrder = clearCurrentOrder;
+window.sendToKitchen = sendToKitchen;
+window.createNewDelivery = createNewDelivery;
+window.selectDelivery = selectDelivery;
+window.assignCourier = assignCourier;
+window.completeDelivery = completeDelivery;
+window.addVeresiye = addVeresiye;
+window.payVeresiye = payVeresiye;
+window.addVeresiyeRecord = addVeresiyeRecord;
+window.addSupplier = addSupplier;
+window.delSupp = delSupp;
+window.openStockModal = openStockModal;
+window.saveStockItem = saveStockItem;
+window.updateStock = updateStock;
+window.addNote = addNote;
+window.delNote = delNote;
+window.addExpense = addExpense;
+window.openSettings = openSettings;
+window.closeSettings = closeSettings;
+window.saveSettings = saveSettings;
+window.demoVerisiYukle = demoVerisiYukle;
+window.sendSleepyMessage = sendSleepyMessage;
+
+// --- FIREBASE ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA5N5k7JqSgbOmIJOZZ0kOL5ZCJY4-kb1M",
+  apiKey: "API_KEY",
   authDomain: "esnafpro-54d75.firebaseapp.com",
   projectId: "esnafpro-54d75",
 };
@@ -692,6 +458,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// 🔄 FIREBASE → LOCAL
 window.syncFromFirebase = async function(key) {
   try {
     const snap = await getDoc(doc(db, "esnafpro", key));
@@ -701,7 +468,7 @@ window.syncFromFirebase = async function(key) {
   } catch (e) {
     console.log("Firebase okuma hatası:", e);
   }
-}
+};
 
 // 🔄 LOCAL → FIREBASE
 window.syncToFirebase = async function(key) {
@@ -711,9 +478,9 @@ window.syncToFirebase = async function(key) {
   } catch (e) {
     console.log("Firebase kayıt hatası:", e);
   }
-}
+};
 
-// 🔁 TÜM VERİYİ ÇEK (ilk açılış)
+// 🔁 TÜM VERİ
 window.syncAllFromCloud = async function() {
   const keys = [
     'esnaf_pro_cust_v19',
@@ -730,13 +497,11 @@ window.syncAllFromCloud = async function() {
   ];
 
   for (let key of keys) {
-    await syncFromFirebase(key);
+    await window.syncFromFirebase(key);
   }
-}
+};
 
-
-
-        </script>
+</script>
     </div>
 </body>
 </html>
