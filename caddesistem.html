@@ -351,7 +351,7 @@
             </div>
         </div>
 
-        <script>
+        <script type="module">
             // --- MOBİL MENÜ KONTROL ---
             function toggleMenu() {
                 const sidebar = document.getElementById('sidebar');
@@ -403,7 +403,7 @@
             let activeTables = []; let activeTableId = null; let activeDeliveryId = null;
 
             document.addEventListener('DOMContentLoaded', () => {
-                await syncAllFromCloud();
+                
                 checkAutoLogin();
                 if(localStorage.getItem('darkMode') === 'true') document.documentElement.classList.add('dark');
             });
@@ -411,11 +411,26 @@
             // --- GİRİŞ SİSTEMİ ---
             function checkAutoLogin() { if (localStorage.getItem('esnafPro_auth') === 'true' || sessionStorage.getItem('esnafPro_auth') === 'true') { showApp(); } }
             function checkLogin() { const u = document.getElementById('loginUser').value; const p = document.getElementById('loginPass').value; const rem = document.getElementById('rememberMe').checked; if (u === ADMIN_USER && p === ADMIN_PASS) { if (rem) localStorage.setItem('esnafPro_auth', 'true'); else sessionStorage.setItem('esnafPro_auth', 'true'); showApp(); } else { document.getElementById('loginError').classList.remove('hidden'); } }
-            function showApp() { document.getElementById('login-container').classList.add('hidden'); document.getElementById('app-container').classList.remove('hidden'); loadSettings(); initTables(); renderDashboard(); checkAlerts(); setInterval(renderKitchen, 30000); checkSleepyStatus(); }
+            async function showApp() {
+    document.getElementById('login-container').classList.add('hidden');
+    document.getElementById('app-container').classList.remove('hidden');
+
+    await syncAllFromCloud(); // 🔥 BURAYA
+
+    loadSettings();
+    initTables();
+    renderDashboard();
+    checkAlerts();
+    setInterval(renderKitchen, 30000);
+    checkSleepyStatus();
+}
             function doLogout() { localStorage.removeItem('esnafPro_auth'); sessionStorage.removeItem('esnafPro_auth'); location.reload(); }
 
             function getStorage(key) { return JSON.parse(localStorage.getItem(key)) || []; }
-            function setStorage(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+            function setStorage(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+    syncToFirebase(key); // 🔥 FIREBASE'E GÖNDER
+}
             function toggleDarkMode() { document.documentElement.classList.toggle('dark'); localStorage.setItem('darkMode', document.documentElement.classList.contains('dark')); }
 
             // --- EXCEL CIKTISI ---
@@ -674,7 +689,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // 🔄 FIREBASE → LOCAL
-async function syncFromFirebase(key) {
+window.syncFromFirebase = async function(key) {
   const snap = await getDoc(doc(db, "esnafpro", key));
   if (snap.exists()) {
     localStorage.setItem(key, JSON.stringify(snap.data().data));
@@ -682,7 +697,7 @@ async function syncFromFirebase(key) {
 }
 
 // 🔄 LOCAL → FIREBASE
-async function syncToFirebase(key) {
+window.syncToFirebase = async function(key) {
   const data = JSON.parse(localStorage.getItem(key)) || [];
   await setDoc(doc(db, "esnafpro", key), { data });
 }
@@ -708,12 +723,7 @@ window.syncAllFromCloud = async function() {
   }
 }
 
-// 🔁 HER KAYITTA CLOUD'A GÖNDER
-const oldSetStorage = window.setStorage;
-window.setStorage = function(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
-  syncToFirebase(key);
-}
+
 
         </script>
     </div>
