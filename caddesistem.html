@@ -403,6 +403,7 @@
             let activeTables = []; let activeTableId = null; let activeDeliveryId = null;
 
             document.addEventListener('DOMContentLoaded', () => {
+                await syncAllFromCloud();
                 checkAutoLogin();
                 if(localStorage.getItem('darkMode') === 'true') document.documentElement.classList.add('dark');
             });
@@ -658,7 +659,62 @@ function checkSleepyStatus() {
     } else {
         badge.classList.add('hidden');
     }
+
 }
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA5N5k7JqSgbOmIJOZZ0kOL5ZCJY4-kb1M",
+  authDomain: "esnafpro-54d75.firebaseapp.com",
+  projectId: "esnafpro-54d75",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 🔄 FIREBASE → LOCAL
+async function syncFromFirebase(key) {
+  const snap = await getDoc(doc(db, "esnafpro", key));
+  if (snap.exists()) {
+    localStorage.setItem(key, JSON.stringify(snap.data().data));
+  }
+}
+
+// 🔄 LOCAL → FIREBASE
+async function syncToFirebase(key) {
+  const data = JSON.parse(localStorage.getItem(key)) || [];
+  await setDoc(doc(db, "esnafpro", key), { data });
+}
+
+// 🔁 TÜM VERİYİ ÇEK (ilk açılış)
+window.syncAllFromCloud = async function() {
+  const keys = [
+    'esnaf_pro_cust_v19',
+    'esnaf_pro_sales_v19',
+    'esnaf_pro_prod_v19',
+    'esnaf_pro_tables_v19',
+    'esnaf_pro_exp_v19',
+    'esnaf_pro_stk_v19',
+    'esnaf_pro_notes_v19',
+    'esnaf_pro_del_v19',
+    'esnaf_pro_supp_v19',
+    'esnaf_pro_ver_v19',
+    'esnaf_pro_set_v19'
+  ];
+
+  for (let key of keys) {
+    await syncFromFirebase(key);
+  }
+}
+
+// 🔁 HER KAYITTA CLOUD'A GÖNDER
+const oldSetStorage = window.setStorage;
+window.setStorage = function(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+  syncToFirebase(key);
+}
+
         </script>
     </div>
 </body>
