@@ -415,7 +415,11 @@
     document.getElementById('login-container').classList.add('hidden');
     document.getElementById('app-container').classList.remove('hidden');
 
-    await syncAllFromCloud(); // 🔥 BURAYA
+    try {
+        await syncAllFromCloud();
+    } catch (e) {
+        console.log("Firebase hata verdi ama sistem devam ediyor", e);
+    }
 
     loadSettings();
     initTables();
@@ -688,18 +692,25 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 🔄 FIREBASE → LOCAL
 window.syncFromFirebase = async function(key) {
-  const snap = await getDoc(doc(db, "esnafpro", key));
-  if (snap.exists()) {
-    localStorage.setItem(key, JSON.stringify(snap.data().data));
+  try {
+    const snap = await getDoc(doc(db, "esnafpro", key));
+    if (snap.exists()) {
+      localStorage.setItem(key, JSON.stringify(snap.data().data));
+    }
+  } catch (e) {
+    console.log("Firebase okuma hatası:", e);
   }
 }
 
 // 🔄 LOCAL → FIREBASE
 window.syncToFirebase = async function(key) {
-  const data = JSON.parse(localStorage.getItem(key)) || [];
-  await setDoc(doc(db, "esnafpro", key), { data });
+  try {
+    const data = JSON.parse(localStorage.getItem(key)) || [];
+    await setDoc(doc(db, "esnafpro", key), { data });
+  } catch (e) {
+    console.log("Firebase kayıt hatası:", e);
+  }
 }
 
 // 🔁 TÜM VERİYİ ÇEK (ilk açılış)
